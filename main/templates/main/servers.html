@@ -1,13 +1,31 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-zccxvcvcbvbcfvcg
-</body>
-</html>
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block content %}
+    {% include "main/fragments/header.html" %}
+     <div class="lobbys gap-3 col-5 mx-auto  " style="margin-top: 4rem">
+        <p class="mt-3 p-2 text-center h1">Открытые лобби</p>
+        {% for lobby in lobbys %}
+            <div class="c-card col-9 mt-3 mx-auto ">
+                <div class="row">
+                    <div class="col p-0 d-flex justify-content-end">
+                        <img src="{% static lobby.avatar %}" id="img-avatar-card" class="img-thumbnail img-fluid " alt="">
+                    </div>
+                    <div class="col-6">
+                        <p class="card-title h5">{{ lobby.name }} ({{ lobby.rating }})</p>
+                        <p class="card-text"><small class="text-muted">{{ lobby.type }}</small></p>
+                    </div>
+                    <a class="btn btn-primary col-3 p-2" style="margin-right: 30px" href="#">Войти</a>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="col justify-content-center d-flex align-items-center gap-2 mt-3" style="margin-bottom: 40px">
+            <button type="button" class="btn btn-secondary">Назад</button>
+            <button type="button" class="btn btn-secondary">Вперёд</button>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block content %}
+    <div class="board">
+        {% for sq in ser %}
+            <div class="square {{ sq.sq_c }}">
+                <div class="figure">{{ sq.pos_f }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

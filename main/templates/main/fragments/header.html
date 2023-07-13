@@ -9,7 +9,7 @@
                 {% if auth == True %}
                     <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ name }}</a>
                 {% else %}
-                    <a data-bs-toggle="modal" data-bs-target="#warningModal" type="button" class="h3"> Гость</a>
+                    <a data-bs-toggle="modal" data-bs-target="#warningModal" id="name-avatar-mini" type="button" class="h3"> Гость</a>
                 {% endif %}
             </div>
         </div>

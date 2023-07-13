@@ -1,21 +1,37 @@
-<div class="modal fade" id="createUiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createUiModal" tabindex="-1" aria-labelledby="createUiModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
+      <div class="logInModal modal-body">
+            <div class="container-fluid">
+                 <h2 class="modal-title text-center">Игра с компьютером</h2>
+                <form action="" method="post">
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <div class="row  mx-auto">
+                            <div class="col-3">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradioBulletUi" autocomplete="off" checked>
+                                <label class="btn btn-secondary align-middle" style="width: 90px; height: 90px" for="btnradioBulletUi">Bullet</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradioClassicUi" autocomplete="on" checked>
+                                <label class="btn btn-secondary" style="width: 90px; height: 90px" for="btnradioClassicUi">Classic</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradioBlitzUi" autocomplete="off">
+                                <label class="btn btn-secondary" style="width: 90px; height: 90px" for="btnradioBlitzUi">Blitz</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradioRapidUi" autocomplete="off">
+                                <label class="btn btn-secondary align-middle" style="width: 90px; height: 90px" for="btnradioRapidUi">Rapid</label>
+                            </div>
 
-      <div class="modal-header" style="border-bottom: none">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body">
-        ...
-      </div>
-
-      <div class="modal-footer" style="border-top: none">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                         <input type="submit" class="col-6 mx-auto btn  btn-lg btn-secondary" value="Играть">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
   </div>
 </div>

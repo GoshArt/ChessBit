@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.index),
     path('profile', views.profile),
     path('servers', views.servers),
+    path('field', views.field),
 ]

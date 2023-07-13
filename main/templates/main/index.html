@@ -15,9 +15,10 @@
             <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Присоединиться</a>
         {% endif %}
         <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createUiModal" type="button">Игра с компьютером</a>
-
-
     </div>
-
-    <!-- Button trigger modal -->
+    {% include 'main/modals/warningModal.html' %}
+    {% include 'main/modals/registerModal.html' %}
+    {% include 'main/modals/logInModal.html' %}
+    {% include 'main/modals/createUiModal.html' %}
+    {% include 'main/modals/createModal.html' %}
 {% endblock %}
