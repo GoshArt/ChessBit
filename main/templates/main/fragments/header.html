@@ -1,0 +1,20 @@
+{% load static %}
+<div class="header row justify-content-center d-flex align-items-center mt-5">
+    <div class="col-md-4 offset-md-1">
+        <div class="row justify-content-center d-flex align-items-center">
+            <div class="col d-flex justify-content-end">
+                <img src="{% static url_avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
+            </div>
+            <div class="col" >
+                {% if auth == True %}
+                    <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ name }}</a>
+                {% else %}
+                    <a data-bs-toggle="modal" data-bs-target="#warningModal" type="button" class="h3"> Гость</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col text-center">
+        <a href="/" class="h1">ChessBit</a>
+    </div>
+</div>

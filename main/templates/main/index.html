@@ -1,17 +1,23 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Главная страница</title>
-</head>
-<body>
-    <h1>Главная страница</h1>
-    <p>Просто текст</p>
-    {% for gosha in goshas %}
-        {{ gosha }}
-        <p></p>
-    {% endfor %}
-</body>
-</html>
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block content %}
+    {% include "main/fragments/header.html" %}
+    <div class="select-type-game d-grid gap-3 col-4 mx-auto" style="margin-top: 8rem">
+        {% if auth == True %}
+            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createModal" type="button">Создать игру</a>
+            <a class="btn btn-primary btn-lg mt-3 p-2" href="servers" >Присоединиться</a>
+        {% else %}
+            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Создать игру</a>
+            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Присоединиться</a>
+        {% endif %}
+        <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createUiModal" type="button">Игра с компьютером</a>
+
+
+    </div>
+
+    <!-- Button trigger modal -->
+{% endblock %}
