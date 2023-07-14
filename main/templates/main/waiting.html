@@ -1,0 +1,18 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+    Ожидание
+{% endblock %}
+
+{% block content %}
+    {% include "main/fragments/header.html" %}
+    <div class="row" style="margin-top: 9rem">
+        <h2 class="text-center">Ожидание соперника</h2>
+        <div class="text-center  mt-5">
+            <div class="spinner-border text-center" role="status" style="width: 5rem; height: 5rem;">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
+        </div>
+        <a class="btn btn-lg btn-secondary col-2 mx-auto mt-5" href="/">Отмена</a>
+    </div>
+{% endblock %}

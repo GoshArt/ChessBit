@@ -6,4 +6,5 @@ urlpatterns = [
     path('profile', views.profile),
     path('servers', views.servers),
     path('field', views.field),
+    path('waiting', views.waiting)
 ]

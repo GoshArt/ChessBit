@@ -1,15 +1,49 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block title %}
-    Главная
+    Игра
 {% endblock %}
 
 {% block content %}
-    <div class="board">
-        {% for sq in ser %}
-            <div class="square {{ sq.sq_c }}">
-                <div class="figure">{{ sq.pos_f }}</div>
+    <div class="row mt-5">
+        <div class="col-8 d-flex justify-content-end">
+            <div class="board col-9  p-0">
+{#                {% for sq in ser %}#}
+{#                    <div class="square {{ sq.sq_c }}">#}
+{#                        <div class="figure">{{ sq.pos_f }}</div>#}
+{#                    </div>#}
+{#                {% endfor %}#}
             </div>
-        {% endfor %}
+        </div>
+        <div class="col-md-4 ms-md-auto" style="display: flex; flex-direction: column; justify-content: space-between">
+            <div class="header row">
+                <div class="row d-flex align-items-center">
+                    <div class="col-md-auto d-flex">
+                        <img src="{% static player2.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
+                    </div>
+                    <div class="col-md-auto" >
+                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player2.name }}({{ player2.rating }})</a>
+                    </div>
+                </div>
+            </div>
+            <div class="header row">
+                <div class="row d-flex align-items-center">
+                    <div class="col-md-auto d-flex">
+                        <img src="{% static player1.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
+                    </div>
+                    <div class="col-md-auto" >
+                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player1.name }}({{ player1.rating }})</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="col d-flex col-md-3 offset-md-2 align-items-center gap-2 mt-3" style="margin-bottom: 40px">
+        <button type="button" class="btn btn-secondary">Сдаться</button>
+        <button type="button" class="btn btn-secondary">Ничья</button>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{% static "main/scripts/field.js" %}"></script>
 {% endblock %}

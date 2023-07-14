@@ -9,10 +9,16 @@ import random
 def index(request):
     goshas = Gosha.objects.all()
     name = "Артём"
-    auth = False
-    id = 5
+    auth = True
     url_avatar = 'main/img/art.jpg'
-    return render(request, 'main/index.html', {"name": name, "url_avatar": url_avatar, "id": id, "auth": auth})
+    return render(request, 'main/index.html', {"name": name, "url_avatar": url_avatar, "auth": auth})
+
+
+def waiting(request):
+    name = "Артём"
+    auth = True
+    url_avatar = 'main/img/art.jpg'
+    return render(request, 'main/waiting.html', {"name": name, "url_avatar": url_avatar, "auth": auth})
 
 
 def profile(request):
@@ -83,5 +89,7 @@ def field(request):
                 b = '♟'
             case '1':
                 b = ''
-        ser.append({"sq_c": a, 'pos_f' : b})
-    return render(request, 'main/field.html', {"ser": ser})
+        ser.append({"sq_c": a, 'pos_f': b})
+    player1 = {"name": "Тёмыч1", "avatar": "main/img/art.jpg", "rating": random.randint(200, 1600)}
+    player2 = {"name": "Тёмыч2", "avatar": "main/img/art.jpg", "rating": random.randint(200, 1600)}
+    return render(request, 'main/field.html', {"ser": ser, 'player1': player1, 'player2': player2})

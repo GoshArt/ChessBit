@@ -132,4 +132,5 @@ body{
 .figure {
     font-size: 3em;
     color: red;
+    cursor: pointer;
 }

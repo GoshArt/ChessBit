@@ -4,7 +4,8 @@
       <div class="logInModal modal-body">
             <div class="container-fluid">
                  <h2 class="modal-title text-center">Выберите режим игры</h2>
-                <form action="" method="post">
+                <form action="main/waiting" method="post">
+                    {% csrf_token %}
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <div class="row  mx-auto">
                             <div class="col-3">
@@ -34,7 +35,7 @@
                     </div>
 
                     <div class="row mt-4">
-                         <input type="submit" class="col-6 mx-auto  btn  btn-lg btn-secondary" value="Создать комнату">
+                         <input type="submit" data-bs-target="#waitingModal" data-bs-toggle="modal" data-bs-dismiss="modal" class="col-6 mx-auto  btn  btn-lg btn-secondary" value="Создать комнату">
                     </div>
                 </form>
             </div>
