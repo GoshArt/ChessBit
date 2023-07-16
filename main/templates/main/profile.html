@@ -11,33 +11,36 @@
                 <div class="col d-flex justify-content-end p-0">
                     <img src="{% static url_avatar %}" id="img-avatar" class="img-thumbnail img-fluid " alt="">
                 </div>
-                <div class="col" >
+                <div class="col">
                     <div class="row">
-                        <div class="col" >
+                        <div class="col">
                             <p class="h3">{{ name }} </p>
                         </div>
-                        <div class="col" >
+                        <div class="col">
                             <p class="h5">{{ email }} </p>
                         </div>
-                        <div class="col" >
+                        <div class="col">
                             <p class="h5">{{ reg }} </p>
                         </div>
-                        <div class="col" >
-                            <a class="h5" style=" color: #CF4846" href="main/logout">Выйти</a>
+                        <div class="col">
+                            <form action="/" method="post">{% csrf_token %}
+                                <input type="submit" class="col-4" value="Выйти">
+{#                                <a class="h5" style=" color: #CF4846" href="/">Выйти</a>#}
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col text-center">
-            <a href="/" class="h1">ChessBit</a>
+            <a href="/main/static" class="h1">ChessBit</a>
         </div>
     </div>
     <div class="history gap-3 col-5 mx-auto  " style="margin-top: 4rem">
         <p class="mt-3 p-2 text-center h1">Последние 10 игр</p>
         {% for game in games %}
-            <div class="c-card col-7 mt-3 mx-auto " >
-                <a href="/history?id={{game.history_id}}">
+            <div class="c-card col-7 mt-3 mx-auto ">
+                <a href="/history?id={{ game.history_id }}">
                     <div class="row">
                         <div class="col-3 p-0 d-flex justify-content-end">
                             <img src="{% static game.avatar %}" id="img-avatar-card" class="img-thumbnail img-fluid " alt="">
