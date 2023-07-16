@@ -13,8 +13,8 @@ class Piece:
         return moves
 
     def find_possible_moves(self, matrix):
-        moves_tuple = self.movement_logic(matrix)
-        return moves_tuple
+        moves_set = self.movement_logic(matrix)
+        return moves_set
 
 
 class Pawn(Piece):
@@ -104,4 +104,5 @@ class King(Piece):
 
 
 P = Pawn(2, 1, "W")
+
 print(P.find_possible_moves(1))
