@@ -133,4 +133,5 @@ body{
     font-size: 3em;
     color: red;
     cursor: pointer;
+    user-select: none;
 }

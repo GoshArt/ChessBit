@@ -12,7 +12,7 @@ def index(request):
     url_avatar = 'main/img/art.jpg'
     error = ""
 
-    print(request.GET)
+
     print(request.POST)
 
     if request.method == "GET":
@@ -102,47 +102,7 @@ def servers(request):
 
 def field(request):
     ser = []
-    pos_str = "rnbqkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR "
-    for i in range(64):
-        b = ""
-        if int(i / 8) % 2 == 0:
-            if (i + 2) % 2 == 0:
-                a = "sq_w"
-            else:
-                a = "sq_b"
-        else:
-            if (i + 2) % 2 == 0:
-                a = "sq_b"
-            else:
-                a = "sq_w"
-        match pos_str[i]:
-            case 'K':
-                b = '♔'
-            case 'Q':
-                b = '♕'
-            case 'R':
-                b = '♖'
-            case 'B':
-                b = '♗'
-            case 'N':
-                b = '♘'
-            case 'P':
-                b = '♙'
-            case 'k':
-                b = '♚'
-            case 'q':
-                b = '♛'
-            case 'r':
-                b = '♜'
-            case 'b':
-                b = '♝'
-            case 'n':
-                b = '♞'
-            case 'p':
-                b = '♟'
-            case '1':
-                b = ''
-        ser.append({"sq_c": a, 'pos_f': b})
+    pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
     player1 = {"name": "Тёмыч1", "avatar": "main/img/art.jpg", "rating": random.randint(200, 1600)}
     player2 = {"name": "Тёмыч2", "avatar": "main/img/art.jpg", "rating": random.randint(200, 1600)}
-    return render(request, 'main/field.html', {"ser": ser, 'player1': player1, 'player2': player2})
+    return render(request, 'main/field.html', {"ser": ser, 'player1': player1, 'player2': player2, 'line': pos_str})
