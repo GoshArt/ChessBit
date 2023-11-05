@@ -8,11 +8,7 @@
     <div class="row mt-5">
         <div class="col-8 d-flex justify-content-end">
             <div class="board col-9  p-0">
-{#                {% for sq in ser %}#}
-{#                    <div class="square {{ sq.sq_c }}">#}
-{#                        <div class="figure">{{ sq.pos_f }}</div>#}
-{#                    </div>#}
-{#                {% endfor %}#}
+
             </div>
         </div>
         <div class="col-md-4 ms-md-auto" style="display: flex; flex-direction: column; justify-content: space-between">
@@ -22,7 +18,7 @@
                         <img src="{% static player2.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
                     </div>
                     <div class="col-md-auto" >
-                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player2.name }}({{ player2.rating }})</a>
+                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player2.name }} ({{ player2.rating }})</a>
                     </div>
                 </div>
             </div>
@@ -32,17 +28,22 @@
                         <img src="{% static player1.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
                     </div>
                     <div class="col-md-auto" >
-                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player1.name }}({{ player1.rating }})</a>
+                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player1.name }} ({{ player1.rating }})</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col d-flex col-md-3 offset-md-2 align-items-center gap-2 mt-3" style="margin-bottom: 40px">
-        <button type="button" class="btn btn-secondary">Сдаться</button>
+        <button type="button" class="btn btn-secondary" id="admit-defeat-button">Сдаться</button>
         <button type="button" class="btn btn-secondary">Ничья</button>
+{##}
+{#        <audio src="{% static 'main/sounds/ChessBit_OST.mp3'%}" preload='auto' autoplay></audio>#}
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{% static "main/scripts/jquery.min.js" %}"></script>
     <script src="{% static "main/scripts/field.js" %}" ></script>
+    {% include 'main/modals/resultModal.html' %}
+    {% include 'main/modals/selectFigureModal.html' %}
 {% endblock %}

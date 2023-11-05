@@ -2,35 +2,31 @@
   <div class="modal-dialog  modal-dialog-centered">
     <div class="modal-content">
       <div class="logInModal modal-body">
-            <div class="container-fluid">
-                 <h2 class="modal-title text-center">Игра с компьютером</h2>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <div class="row  mx-auto">
-                            <div class="col-3">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradioBulletUi" autocomplete="off" checked>
-                                <label class="btn btn-secondary align-middle" style="width: 90px; height: 90px" for="btnradioBulletUi">Bullet</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradioClassicUi" autocomplete="on" checked>
-                                <label class="btn btn-secondary" style="width: 90px; height: 90px" for="btnradioClassicUi">Classic</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradioBlitzUi" autocomplete="off">
-                                <label class="btn btn-secondary" style="width: 90px; height: 90px" for="btnradioBlitzUi">Blitz</label>
-                            </div>
-                            <div class="col-3">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradioRapidUi" autocomplete="off">
-                                <label class="btn btn-secondary align-middle" style="width: 90px; height: 90px" for="btnradioRapidUi">Rapid</label>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                         <input type="submit" class="col-6 mx-auto btn  btn-lg btn-secondary" value="Играть">
-                    </div>
-                </form>
+          <div class="container-fluid">
+              <h2 class="modal-title text-center">Игра с компьютером</h2>
+              <h5  class="modal-title text-center mb-2">Выберите сторону</h5>
+              <form action="" method="post">
+                  {% csrf_token %}
+                  <div class="row justify-content-center" role="group" aria-label="Basic radio toggle button group">
+                      <div class="col-6 row" style="justify-content: center">
+                          <input type="radio" class="btn-check" name="btnradio" id="btnradioBulletUi" autocomplete="off"
+                                 checked>
+                          <label class="btn btn-secondary align-middle" style="width: 120px; height: 120px"
+                                 for="btnradioBulletUi"><img src="/static/main/img/pieces/white/king.png"
+                                                             class="h-75 rounded mx-auto d-block" alt="♔"/><p>Белые</p></label>
+                      </div>
+                      <div class="col-6 row" style="justify-content: center">
+                          <input type="radio" class="btn-check" name="btnradio" id="btnradioClassicUi" autocomplete="on"
+                                 checked>
+                          <label class="btn btn-secondary" style="width: 120px; height: 120px"
+                                 for="btnradioClassicUi"><img src="/static/main/img/pieces/black/king.png"
+                                                              class="h-75 rounded mx-auto d-block" alt="♚"/> <p>Чёрные</p></label>
+                      </div>
+                  </div>
+                  <div class="row mt-4">
+                      <input type="submit" class="col-6 mx-auto btn  btn-lg btn-secondary" value="Играть">
+                  </div>
+              </form>
             </div>
         </div>
     </div>

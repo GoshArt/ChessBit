@@ -1,0 +1,21 @@
+<div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-content ">
+        <div class="updateUserModal modal-body">
+            <div class="container-fluid">
+                 <h2 class="modal-title text-center" id="exampleModalLabel">Изменить имя</h2>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row mt-3">
+                        <label class="col-6" for="username">Имя пользователя</label>
+                        <input class="col-6" id="username" type="text" name="username">
+                    </div>
+                    <div class="row mt-4">
+                         <input type="submit" class="col-4  mx-auto btn btn-secondary" value="Сохранить">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -5,40 +5,16 @@ let df;
 let dsq;
 let color = 'white';
 
+
 $(function (){
     start()
-
-    dsq.forEach((event) => {
-        event.addEventListener('click', () => {
-            let coord = -1
-            for(let i = 1; i < 64; i++) {
-                if('3' === map[+i+64]){
-                    coord = i
-                }
-            }
-            if(+map[+event.id.slice(1) + +64] === 2){
-                map[event.id.slice(1)] = map[coord]
-                map[coord] = 1;
-                clearMoveMap();
-                showFigures(map.join(""));
-                updateFigures();
-
-            } else if(+map[+event.id.slice(1) + +64] === 0){
-                clearMoveMap();
-            }
-        });
-    });
+    pressSquare()
 });
 function updateFigures(){
     df = document.querySelectorAll("div.figure");
     df.forEach((event) => {
         event.addEventListener('click', () => {
-            let coord = -1
-            for(let i = 1; i < 64; i++) {
-                if('3' === map[+i+64]){
-                    coord = i
-                }
-            }
+            let coord = map.indexOf('3')-64
             if(coord < 0 && !thisEnemy(event.id.slice(2))){
                 viewMoveFigure(event.id.slice(2));
             }
@@ -51,13 +27,36 @@ function start(){
     // map = line.split('');
     addSquares();
     showFigures(map.join(""))
-    dsq = document.querySelectorAll("div.square");
     updateFigures();
+    buttonSurrender()
 }
-
-
-function moveFigure(frCoord, toCoord){
-    console.log('move from ' + frCoord + ' to ' + toCoord)
+function pressSquare(){
+    dsq = document.querySelectorAll("div.square");
+    dsq.forEach((event) => {
+        event.addEventListener('click', () => {
+            let coord = map.indexOf('3')-64
+            if(+map[+event.id.slice(1) + +64] === 2){
+                map[event.id.slice(1)] = map[coord]
+                map[coord] = 1;
+                if(!whichKingLoss() && ((map[event.id.slice(1)] === 'P' && color === 'white') || (map[event.id.slice(1)] === 'p' && color === 'black')) &&  0 <= +event.id.slice(1) && +event.id.slice(1) <= 7){
+                    changePawn(event.id.slice(1));
+                }else {
+                    showFigures(map.join(""));
+                    updateFigures();
+                }
+                $.post(
+                    "/field",
+                    {
+                        map : map.join(''),
+                    },
+                    onAjaxSuccess,
+        );
+            }
+            if(+map[+event.id.slice(1) + +64] !== 3){
+                clearMoveMap();
+            }
+        });
+    });
 }
 function viewMoveFigure(coord){
     switch (map[coord]){
@@ -113,7 +112,6 @@ function viewMoveFigure(coord){
             }
     }
 }
-
 function clearMoveMap(){
      for(let i = 64; i < 128; i++) {
             map[i] = '0'
@@ -142,29 +140,29 @@ function showFigureAt(coord, figure){
 function getChessSymbol(figure){
     switch (figure){
         case 'K':
-            return '♔'
+            return '<img src="/static/main/img/pieces/white/king.png" class="h-75 w-75 rounded mx-auto d-block" alt="♔" />'
         case 'Q':
-            return '♕'
+            return '<img src="/static/main/img/pieces/white/queen.png" class="h-75 w-75 rounded mx-auto d-block" alt="♕" />'
         case 'R':
-            return '♖'
+            return '<img src="/static/main/img/pieces/white/rook.png" class="h-75 w-75 rounded mx-auto d-block" alt="♖" />'
         case 'B':
-            return '♗'
+            return '<img src="/static/main/img/pieces/white/bishop.png" class="h-75 w-75 rounded mx-auto d-block" alt="♗" />'
         case 'N':
-            return '♘'
+            return '<img src="/static/main/img/pieces/white/knight.png" class="h-75 w-75 rounded mx-auto d-block" alt="♘" />'
         case 'P':
-            return '♙'
+            return '<img src="/static/main/img/pieces/white/pawn.png" class="h-75 w-75 rounded mx-auto d-block" alt="♙" />'
         case 'k':
-            return '♚'
+            return '<img src="/static/main/img/pieces/black/king.png" class="h-75 w-75 rounded mx-auto d-block" alt="♚" />'
         case 'q':
-            return '♛'
+            return '<img src="/static/main/img/pieces/black/queen.png" class="h-75 w-75 rounded mx-auto d-block" alt="♛" />'
         case 'r':
-            return '♜'
+            return '<img src="/static/main/img/pieces/black/rook.png" class="h-75 w-75 rounded mx-auto d-block" alt="♜" />'
         case 'b':
-            return '♝'
+            return '<img src="/static/main/img/pieces/black/bishop.png" class="h-75 w-75 rounded mx-auto d-block"  alt="♝" />'
         case 'n':
-            return '♞'
+            return '<img src="/static/main/img/pieces/black/knight.png" class="h-75 w-75 rounded mx-auto d-block" alt="♞" />'
         case 'p':
-            return '♟'
+            return '<img src="/static/main/img/pieces/black/pawn.png" class="h-75 w-75 rounded mx-auto d-block" alt="♟" />'
         case '1':
             return ''
         default :
@@ -174,7 +172,6 @@ function getChessSymbol(figure){
 function isBlackSquareAt(coord){
     return(coord % 8 + Math.floor(coord/8)) % 2;
 }
-
 function verticalHorizontal(coord){
     map[64 + +coord] = "3"
     let i = coord
@@ -251,19 +248,21 @@ function knight(coord){
     availableSquare(coord, -17, 2)
 
 }
-
 function pawn(coord){
     map[64 + +coord] = '3'
-    availableSquare(coord,-8,1)
-    if (48<= +coord && +coord <= 55){
-        console.log("A")
-        availableSquare(coord-8,-8,1)
-    }
-    if(thisEnemy(coord-7)){
-        availableSquare(coord,-7,1)
-    }
-    if(thisEnemy(coord-9)){
-        availableSquare(coord,-9,1)
+    if(!(((map[coord] === 'P' && color === 'white') || (map[coord] === 'p' && color === 'black'))  &&  0 <= coord && coord <= 7)){
+        if(!thisEnemy(coord-8)){
+            availableSquare(coord,-8,1)
+            if (48<= +coord && +coord <= 55 && !thisEnemy(coord-16)){
+                availableSquare(coord-8,-8,1)
+            }
+        }
+        if(thisEnemy(coord-7)){
+            availableSquare(coord,-7,1)
+        }
+        if(thisEnemy(coord-9)){
+            availableSquare(coord,-9,1)
+        }
     }
 }
 function king(coord){
@@ -277,11 +276,9 @@ function king(coord){
     availableSquare(coord, -8, 1)
     availableSquare(coord, -9, 1)
 }
-
 function thisEnemy(coord){
     return (color === 'white' && map[coord] === map[coord].toLowerCase() && map[coord] !== '1') || (color === 'black' && map[coord] === map[coord].toUpperCase() && map[coord] !== '1');
 }
-
 function availableSquare(coord, add, line){
     if ((0 <= +coord + +add && +coord + +add <= 63 && Math.abs((((+coord + +add) - ((+coord+ +add) % 8)) / 8) - ((+coord - (+coord % +8)) / +8)) === line) && (thisEnemy(+coord + +add) || map[+coord + +add] === '1')){
         map[64 + +coord + +add] = '2'
@@ -289,3 +286,74 @@ function availableSquare(coord, add, line){
     }
     return false;
 }
+function whichKingLoss(){
+    let resultModal = new bootstrap.Modal(document.getElementById('resultModal'), )
+    if ((!map.includes('k') && color==="white") || (!map.includes('K') && color==="black")){ //победа
+        result_str.innerHTML=`Поздравляем, вы победили! Вражеский король повержен. Сыграйте снова и закрепите свой успех.`;
+        resultModal.show()
+        return true
+    } else if ((!map.includes('K') && color==="white") || (!map.includes('k') && color==="black")){
+        result_str.innerHTML=`К сожалению вы потерпели поражение и ваш король пал. Вы проиграли! Попробуйте заново и победите!`;
+        resultModal.show()
+        return true
+    }else {
+        return false
+    }
+}
+function changePawn(coord){
+    let selectFigureModal = new bootstrap.Modal(document.getElementById('selectFigureModal'), )
+    selectFigureModal.show()
+    let select_knight = document.getElementById('select_knight');
+    let select_bishop = document.getElementById('select_bishop');
+    let select_rook = document.getElementById('select_rook');
+    let select_queen = document.getElementById('select_queen');
+    select_knight.addEventListener('click', () => {
+        if (color === "white"){
+            map[coord] = "N"
+        }else
+            map[coord] = "n"
+        showFigures(map.join(""));
+        updateFigures();
+        selectFigureModal.hide()
+    });
+    select_bishop.addEventListener('click', () => {
+        if (color === "white"){
+            map[coord] = "B"
+        }else
+            map[coord] = "b"
+        showFigures(map.join(""));
+        updateFigures();
+        selectFigureModal.hide()
+    });
+    select_rook.addEventListener('click', () => {
+        if (color === "white"){
+            map[coord] = "R"
+        }else
+            map[coord] = "r"
+        showFigures(map.join(""));
+        updateFigures();
+        selectFigureModal.hide()
+    });
+    select_queen.addEventListener('click', () => {
+        if (color === "white"){
+            map[coord] = "Q"
+        }else
+            map[coord] = "q"
+        showFigures(map.join(""));
+        updateFigures();
+        selectFigureModal.hide()
+    });
+
+}
+function buttonSurrender(){
+    let resultModal = new bootstrap.Modal(document.getElementById('resultModal'), )
+    let admit_defeat_button = document.getElementById('admit-defeat-button');
+    admit_defeat_button.addEventListener('click', () => {
+        result_str.innerHTML=`К сожалению вы сдались и ваш король пал. \n Вы проиграли!\nПопробуйте заново и попытайтесь победить!`;
+        resultModal.show()
+    });
+}
+function onAjaxSuccess(data) {
+        const jsonString = JSON.stringify(data)
+        console.log(jsonString)
+    }

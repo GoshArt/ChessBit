@@ -8,11 +8,11 @@
     {% include "main/fragments/header.html" %}
     <div class="select-type-game d-grid gap-3 col-4 mx-auto" style="margin-top: 8rem">
         {% if auth == True %}
-            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createModal" type="button">Создать игру</a>
-            <a class="btn btn-primary btn-lg mt-3 p-2" href="servers">Присоединиться</a>
+            <a disabled class="btn disabled btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createModal" type="button">Создать игру</a>
+            <a class="btn disabled btn-primary btn-lg mt-3 p-2" href="servers">Присоединиться</a>
         {% else %}
-            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Создать игру</a>
-            <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Присоединиться</a>
+            <a class="btn disabled btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Создать игру</a>
+            <a class="btn disabled btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#warningModal" type="button">Присоединиться</a>
         {% endif %}
         <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createUiModal" type="button" >Игра с компьютером</a>
     </div>
