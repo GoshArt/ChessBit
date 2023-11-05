@@ -1,7 +1,8 @@
 from random import random
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from main.GameLogic.create_basic_matrix import *
 
 from .models import *
 import random
@@ -22,7 +23,9 @@ def index(request):
         #     print(request.GET)
 
     elif request.method == "POST":
-        print("POST")
+        # print("POST")
+        print(request.POST)
+
         if "username" in request.POST:
             username = request.POST["username"]
             password = request.POST["password"]
@@ -51,6 +54,12 @@ def index(request):
                 request.session['auth'] = True
                 request.session['name'] = name
                 request.session['password'] = f_password
+
+        elif 'chosenColor' in request.POST:
+            print(2)
+            request.session['botColor'] = request.POST['chosenColor']
+            return redirect(field)
+
         elif len(request.POST) < 2:
             request.session['auth'] = False
             request.session['name'] = ""
@@ -87,7 +96,8 @@ def profile(request):
     rating = random.randint(500, 1200)
     url_avatar = 'main/img/person.svg'
     return render(request, 'main/profile.html',
-                  {"games": games, "id": id, "rating": rating, "name": name, "url_avatar": url_avatar, "email": email, "reg": reg})
+                  {"games": games, "id": id, "rating": rating, "name": name, "url_avatar": url_avatar, "email": email,
+                   "reg": reg})
 
 
 def servers(request):
@@ -106,12 +116,23 @@ def is_ajax(request):
 
 @csrf_exempt
 def field(request):
+    print("GETSEX1")
+    if 'botColor' in request.session:
+        print(request.session['botColor'])
+        if 'currentPosition' not in request.session:
+            request.session = basic_matrix2D
+    print("GETSEX2")
+
     if request.method == "POST" and is_ajax(request=request):
         a = request.POST["map"]
+        mtrx = Matrix(a)
+        mtrx.collect_all_possible_moves(request.session["botColor"])
+        mtrx.make_a_move(mtrx.pick_a_move())
+        a = mtrx.matrix_to_string_conversion()
         return HttpResponse(a)
     else:
-        ser = []
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": "Георгий1", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
         player2 = {"name": "Георгий2", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
-        return render(request, 'main/field.html', {"ser": ser, 'player1': player1, 'player2': player2, 'line': pos_str})
+        return render(request, 'main/field.html', {'player1': player1, 'player2': player2, 'line': pos_str,
+                                                   'botColor': request.session['botColor']})
