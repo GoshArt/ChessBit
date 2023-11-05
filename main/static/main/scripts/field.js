@@ -3,12 +3,23 @@ let divFigure = '<div id="f$coord" class="figure">$figure</div>';
 let map;
 let df;
 let dsq;
-let color = 'white';
+let botColor = document.getElementById("botColor").value;
+let color;
+let turn = 'white';
 
 
-$(function (){
+$(function () {
     start()
-    pressSquare()
+    pressSquare();
+    if (color === "black") {
+        $.post(
+            "/field",
+            {
+                map: map.join(''),
+            },
+            onAjaxSuccess,
+        );
+    }
 });
 function updateFigures(){
     df = document.querySelectorAll("div.figure");
@@ -25,6 +36,16 @@ function start(){
     map = new Array(128)
     map = "rnbqkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000".split('');
     // map = line.split('');
+    console.log(map)
+    if(botColor === "W"){
+        color = "black"
+        reverseMap()
+        console.log("b")
+    }else {
+        color = "white"
+        console.log("w")
+    }
+
     addSquares();
     showFigures(map.join(""))
     updateFigures();
@@ -44,15 +65,19 @@ function pressSquare(){
                     showFigures(map.join(""));
                     updateFigures();
                 }
+                if(color==='black'){
+                    reverseMap()
+                }
+
                 $.post(
                     "/field",
                     {
-                        map : map.join(''),
+                        map: map.join(''),
                     },
                     onAjaxSuccess,
-        );
+                );
             }
-            if(+map[+event.id.slice(1) + +64] !== 3){
+            if (+map[+event.id.slice(1) + +64] !== 3){
                 clearMoveMap();
             }
         });
@@ -129,7 +154,6 @@ function addSquares(){
 function showFigures(figures){
     for (let coord = 0; coord < 64; coord++)
         showFigureAt(coord,figures.charAt(coord))
-
 }
 function showFigureAt(coord, figure){
     map[coord] = figure;
@@ -354,6 +378,15 @@ function buttonSurrender(){
     });
 }
 function onAjaxSuccess(data) {
-        const jsonString = JSON.stringify(data)
-        console.log(jsonString)
-    }
+        map = data.split('');
+        if(color==='black'){
+            reverseMap();
+        }
+        whichKingLoss();
+        showFigures(map.join(""));
+        updateFigures();
+        clearMoveMap();
+}
+function reverseMap(){
+    map = [...map.slice(0,64).reverse(),  ...map.slice(64,128)]
+}

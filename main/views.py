@@ -120,7 +120,7 @@ def field(request):
     if 'botColor' in request.session:
         print(request.session['botColor'])
         if 'currentPosition' not in request.session:
-            request.session = basic_matrix2D
+            request.session['currentPosition'] = basic_matrix2D
     print("GETSEX2")
 
     if request.method == "POST" and is_ajax(request=request):
@@ -131,6 +131,7 @@ def field(request):
         a = mtrx.matrix_to_string_conversion()
         return HttpResponse(a)
     else:
+        ser = []
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": "Георгий1", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
         player2 = {"name": "Георгий2", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
