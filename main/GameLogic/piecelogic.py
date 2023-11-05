@@ -36,6 +36,17 @@ class EmptyPiece:
             self.pos_moves.add(self.alpha[x] + str(y + 1))
         return 0
 
+    def linear_continuity_pawn_sub_check(self, matrix, y, x):
+        # Function determines if it's possible to move to that specific
+        # square for a pawn and whether you should try checking next one
+        if coordinates_possibility_sub_check(matrix, y, x) == 0:
+            return -1
+        if type(matrix.pieces_on_board[y][x]) == EmptyPiece:
+            return 0
+        if matrix.pieces_on_board[y][x].color != matrix.pieces_on_board[self.y][self.x].color:
+            self.pos_moves.add(self.alpha[x] + str(y + 1))
+        return 0
+
     def linear_continuity_no_take_sub_check(self, matrix, y, x):
         # Same to previous but without taking the piece on the last possible square
         if coordinates_possibility_sub_check(matrix, y, x) == 0:
@@ -129,7 +140,7 @@ class Pawn(EmptyPiece):
                 move[0] *= -1
 
         for y, x in take_moveset:
-            self.linear_continuity_sub_check(matrix, self.y + y, self.x + x)
+            self.linear_continuity_pawn_sub_check(matrix, self.y + y, self.x + x)
 
 
 class Rook(EmptyPiece):

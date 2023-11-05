@@ -12,6 +12,7 @@ $(function () {
     start()
     pressSquare();
     if (color === "black") {
+        reverseMap()
         $.post(
             "/field",
             {

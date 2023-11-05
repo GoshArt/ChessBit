@@ -131,9 +131,9 @@ def field(request):
         a = mtrx.matrix_to_string_conversion()
         return HttpResponse(a)
     else:
-        ser = []
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": "Георгий1", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
         player2 = {"name": "Георгий2", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
+        botColor = request.session['botColor']
         return render(request, 'main/field.html', {'player1': player1, 'player2': player2, 'line': pos_str,
-                                                   'botColor': request.session['botColor']})
+                                                   'botColor': botColor})
