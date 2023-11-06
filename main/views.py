@@ -54,6 +54,7 @@ def index(request):
                 request.session['auth'] = True
                 request.session['name'] = name
                 request.session['password'] = f_password
+                request.session['email'] = email
 
         elif 'chosenColor' in request.POST:
             print(2)
@@ -90,8 +91,8 @@ def profile(request):
                 "history_id": "2"}
         games.append(game)
     id = request.GET.get("id")
-    name = "Георгий"
-    email = "NechGeorg@gmail.com"
+    name = request.session["name"]
+    email = request.session["email"]
     reg = "11.09.2001"
     rating = random.randint(500, 1200)
     url_avatar = 'main/img/person.svg'
