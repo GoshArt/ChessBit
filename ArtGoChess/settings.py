@@ -1,3 +1,4 @@
+import os
 """
 Django settings for ArtGoChess project.
 
@@ -75,9 +76,9 @@ WSGI_APPLICATION = 'ArtGoChess.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'Chess',
         'USER': 'postgres',
-        'PASSWORD': 'rootroot',
+        'PASSWORD': os.getenv("DATABASEPASSWORD"),
         'HOST': 'localhost',
         'PORT': '5432'
     }

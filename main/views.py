@@ -29,7 +29,7 @@ def index(request):
         if "username" in request.POST:
             username = request.POST["username"]
             password = request.POST["password"]
-            user = User.objects.filter(UserNickname=username, UserPassword=password)
+            user = Users.objects.filter(nickname=username, password=password)
 
             if user:
                 request.session['auth'] = True
@@ -46,10 +46,10 @@ def index(request):
             if f_password != re_password:
                 error = "Неверный пароль"
             else:
-                new_user = User()
-                new_user.UserNickname = name
-                new_user.UserPassword = f_password
-                new_user.UserEmail = email
+                new_user = Users()
+                new_user.nickname = name
+                new_user.password = f_password
+                new_user.email = email
                 new_user.save()
                 request.session['auth'] = True
                 request.session['name'] = name
