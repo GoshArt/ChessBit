@@ -9,7 +9,20 @@ import random
 
 
 def index(request):
+
+    print("test")
     auth = False
+    # pos = Users.objects.get(nickname="noksyte2")
+    # print(1)
+    # Users.objects.create(nickname="ass", password="anal")
+    # print(2)
+    # pos.ratingelo = 1200
+    # pos.save()
+    # print(3)
+    # v = Users.objects.get(nickname="ass")
+    # v.delete()
+    # print(4)
+
     name = ""
     url_avatar = 'main/img/person.svg'
     error = ""
@@ -84,6 +97,20 @@ def waiting(request):
 
 
 def profile(request):
+    if request.method == "POST":
+        if "username" in request.POST:
+            pos = Users.objects.get(nickname=request.session["name"])
+            pos.nickname = request.POST["username"]
+            pos.save()
+            request.session["name"] = request.POST["username"]
+        if "deletion" in request.POST:
+            pos = Users.objects.get(nickname=request.session["name"])
+            pos.delete()
+            request.session["name"] = ""
+            request.session['auth'] = False
+            print("retard")
+            return redirect(index)
+
     games = []
     for i in range(10):
         res = random.randint(-1, 1)
@@ -92,6 +119,9 @@ def profile(request):
         games.append(game)
     id = request.GET.get("id")
     name = request.session["name"]
+    print(Users.objects.get(nickname=name).email)
+    if "email" not in request.session:
+        request.session["email"] = Users.objects.get(nickname=name).email
     email = request.session["email"]
     reg = "11.09.2001"
     rating = random.randint(500, 1200)
