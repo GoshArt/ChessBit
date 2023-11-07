@@ -82,9 +82,9 @@ DBENGINE = 'django.db.backends.mysql' if DEBUG else 'django.db.backends.postgres
 DATABASES = {
     'default': {
         'ENGINE': DBENGINE,
-        'NAME': os.getenv("DATABASENAME"),
-        'USER': 'postgres',
-        'PASSWORD': os.getenv("DATABASEPASSWORD"),
+        'NAME': os.getenv("DATABASE_NAME"),
+        'USER': os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
         'HOST': 'localhost',
         'PORT': '5432'
     }
