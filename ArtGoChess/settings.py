@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,9 +77,11 @@ WSGI_APPLICATION = 'ArtGoChess.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DBENGINE = 'django.db.backends.mysql' if DEBUG else 'django.db.backends.postgresql'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': DBENGINE,
         'NAME': os.getenv("DATABASENAME"),
         'USER': 'postgres',
         'PASSWORD': os.getenv("DATABASEPASSWORD"),
@@ -123,10 +126,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'productionfiles'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
