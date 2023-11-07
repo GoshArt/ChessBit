@@ -7,39 +7,38 @@
 {% block content %}
     <input type="hidden" id="botColor" name="variable" value="{{ botColor }}">
     <div class="row mt-5">
-        <div class="col-8 d-flex justify-content-end">
-            <div class="board col-9  p-0">
+        <div class="col-md-7 col-sm-12 offset-md-1 d-flex justify-content-end flex-column">
+            <div class="board">
             </div>
         </div>
-        <div class="col-md-4 ms-md-auto" style="display: flex; flex-direction: column; justify-content: space-between">
-            <div class="header row">
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-auto d-flex">
-                        <img src="{% static player2.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
-                    </div>
-                    <div class="col-md-auto" >
-                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player2.name }} ({{ player2.rating }})</a>
-                    </div>
+        <div class="col-md-4 d-flex flex-column justify-content-between" >
+            <div class="header row mt-1 d-flex align-items-center">
+                <div class="col-auto">
+                    <img src="{% static player2.avatar %}" class="img-avatar-mini img-thumbnail img-fluid "
+                         alt="">
+                </div>
+                <div class="col-auto p-0">
+                    <a href="/profile?id={{ id }}" class="name-avatar-mini" class="h3">{{ player2.name }}
+                        ({{ player2.rating }})</a>
                 </div>
             </div>
-            <div class="header row">
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-auto d-flex">
-                        <img src="{% static player1.avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
-                    </div>
-                    <div class="col-md-auto" >
-                        <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ player1.name }} ({{ player1.rating }})</a>
-                    </div>
+            <div class="header row mt-1 d-flex align-items-center">
+                <div class="col-auto">
+                    <img src="{% static player1.avatar %}" class="img-avatar-mini img-thumbnail img-fluid " alt="">
+                </div>
+                <div class="col-auto p-0">
+                    <a href="/profile?id={{ id }}" class="name-avatar-mini" class="h3">{{ player1.name }}
+                        ({{ player1.rating }})</a>
                 </div>
             </div>
         </div>
+        <div class="col d-flex col-md-3 offset-md-1 align-items-center gap-2 mt-3" style="margin-bottom: 40px">
+            <button type="button" class="btn btn-secondary" id="admit-defeat-button">Сдаться</button>
+            <button type="button" class="btn disabled btn-secondary">Ничья</button>
+            {#        <audio src="{% static 'main/sounds/ChessBit_OST.mp3'%}" preload='auto' autoplay></audio>#}
+        </div>
     </div>
-    <div class="col d-flex col-md-3 offset-md-2 align-items-center gap-2 mt-3" style="margin-bottom: 40px">
-        <button type="button" class="btn btn-secondary" id="admit-defeat-button">Сдаться</button>
-        <button type="button" class="btn btn-secondary">Ничья</button>
-{##}
-{#        <audio src="{% static 'main/sounds/ChessBit_OST.mp3'%}" preload='auto' autoplay></audio>#}
-    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{% static "main/scripts/jquery.min.js" %}"></script>

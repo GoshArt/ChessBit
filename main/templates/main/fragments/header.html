@@ -1,20 +1,20 @@
 {% load static %}
 <div class="header row justify-content-center d-flex align-items-center mt-5">
-    <div class="col-md-4 offset-md-1">
+    <div class="col ">
         <div class="row justify-content-center d-flex align-items-center">
             <div class="col d-flex justify-content-end">
-                <img src="{% static url_avatar %}" id="img-avatar-mini" class="img-thumbnail img-fluid " alt="">
+                <img src="{% static url_avatar %}" class="img-avatar-mini img-thumbnail img-fluid " alt="">
             </div>
             <div class="col" >
                 {% if auth == True %}
-                    <a href="/profile?id={{id}}" id="name-avatar-mini" class="h3">{{ name }}</a>
+                    <a href="/profile?id={{id}}" class="h2">{{ name }}</a>
                 {% else %}
-                    <a data-bs-toggle="modal" data-bs-target="#warningModal" id="name-avatar-mini" type="button" class="h3">Гость</a>
+                    <a data-bs-toggle="modal" data-bs-target="#warningModal" class="name-avatar-mini" type="button" >Гость</a>
                 {% endif %}
             </div>
         </div>
     </div>
     <div class="col text-center">
-        <a href="/main/static" class="h1">ChessBit</a>
+        <a href="/" class="h1">ChessBit</a>
     </div>
 </div>

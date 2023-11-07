@@ -22,6 +22,10 @@ $(function () {
         );
     }
 });
+$( window ).resize(function() {
+	res();
+});
+
 function updateFigures(){
     df = document.querySelectorAll("div.figure");
     df.forEach((event) => {
@@ -391,3 +395,8 @@ function onAjaxSuccess(data) {
 function reverseMap(){
     map = [...map.slice(0,64).reverse(),  ...map.slice(64,128)]
 }
+function res(){
+   var width = $('.board').width();
+	 $('.board').height(width);
+} res();
+

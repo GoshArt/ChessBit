@@ -117,12 +117,14 @@ def is_ajax(request):
 
 @csrf_exempt
 def field(request):
-    print("GETSEX1")
+    if "auth" in request.session:
+        if request.session["auth"]:
+            name = request.session["name"]
+
     if 'botColor' in request.session:
         print(request.session['botColor'])
         if 'currentPosition' not in request.session:
             request.session['currentPosition'] = basic_matrix2D
-    print("GETSEX2")
 
     if request.method == "POST" and is_ajax(request=request):
         a = request.POST["map"]
@@ -133,8 +135,8 @@ def field(request):
         return HttpResponse(a)
     else:
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
-        player1 = {"name": "Георгий1", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
-        player2 = {"name": "Георгий2", "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
+        player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
+        botArtem = {"name": "Bot Artem v0.1", "avatar": "main/img/robot.svg", "rating": '200'}
         botColor = request.session['botColor']
-        return render(request, 'main/field.html', {'player1': player1, 'player2': player2, 'line': pos_str,
+        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'line': pos_str,
                                                    'botColor': botColor})

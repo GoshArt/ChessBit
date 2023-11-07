@@ -2,33 +2,41 @@ body{
     background: #F1EADA;
 
 }
-#img-avatar-mini {
-    width: 60px;
-    height: 60px;
-    background-color: #d2d2d2;
+.img-avatar-mini {
+    width: calc(1.4rem + 3vw);
+    height: calc(1.4rem + 3vw);
+    background-color: #ffffff;
     border: 2px solid #1B1217;
+    -moz-user-select: none; -khtml-user-select: none; user-select: none;
+    pointer-events: none;
 }
-#img-avatar {
-    width: 120px;
-    height: 120px;
+.img-avatar {
+    width: calc(3.4rem + 3vw);
+    height: calc(3.4rem + 3vw);
     /*background-color: #1B1217;*/
-    background-color: #d2d2d2;
+    background-color: #ffffff;
     border: 2px solid #1B1217;
+    -moz-user-select: none; -khtml-user-select: none; user-select: none;
+    pointer-events: none;
 }
-#img-avatar-card {
+.img-avatar-card {
     width: 45px;
     height: 45px;
-    background-color: #d2d2d2;
+    background-color: #ffffff;
     border: 2px solid #1B1217;
+    -moz-user-select: none; -khtml-user-select: none; user-select: none;
+    pointer-events: none;
 }
-#name-avatar-mini {
-    font-size: 32px;
+.name-avatar-mini {
+    font-size: calc(0.8rem + 1vw);
     text-decoration: none;
     color: #1B1217;
+    -moz-user-select: none; -khtml-user-select: none; user-select: none;
 }
 .header a{
     color: #1B1217;
     text-decoration: none;
+    -moz-user-select: none; -khtml-user-select: none; user-select: none;
 }
 
 .btn-primary {
@@ -114,10 +122,10 @@ body{
 
 /*field*/
 .board {
-    width: 640px;
-    height: 640px;
+    width: 100% ;
     border: 2px solid #001C1F;
 }
+
 .square{
     float: left;
     width: 12.5%;

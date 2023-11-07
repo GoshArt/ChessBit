@@ -130,8 +130,8 @@ class Pawn(EmptyPiece):
         y_add, x_add = -1, 0
         if self.color == "B":
             y_add *= -1
-        self.linear_continuity_no_take_sub_check(matrix, self.y + y_add, self.x + x_add)
-        if not self.moved:
+        res = self.linear_continuity_no_take_sub_check(matrix, self.y + y_add, self.x + x_add)
+        if not self.moved and res:
             self.linear_continuity_no_take_sub_check(matrix, self.y + y_add * 2, self.x + x_add)
 
         take_moveset = [[-1, -1], [-1, 1]]
