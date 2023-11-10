@@ -9,7 +9,6 @@ import random
 
 
 def index(request):
-
     auth = False
     # pos = Users.objects.get(nickname="noksyte2")
     # print(1)
@@ -85,12 +84,14 @@ def index(request):
             name = request.session["name"]
 
     best_players = []
-    players_name = ["Данияр", "Артём", "Георгий", "Артур", "Азалия", "Ева", "Рин", "Кустик", "Христофор Волк", "Александр"]
+    players_name = ["Данияр", "Артём", "Георгий", "Артур", "Азалия", "Ева", "Рин", "Кустик", "Христофор Волк",
+                    "Александр"]
     for i in range(10):
-        best_player = {"name": players_name[i], "res": random.randint(400,2000), "gamer_id": "2", }
+        best_player = {"name": players_name[i], "res": random.randint(400, 2000), "gamer_id": "2", }
         best_players.append(best_player)
     best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
-    return render(request, 'main/index.html', {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error,  "best_players": best_players})
+    return render(request, 'main/index.html',
+                  {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players})
 
 
 def waiting(request):
@@ -164,7 +165,8 @@ def field(request):
         mtrx.collect_all_possible_moves(request.session["botColor"])
         mtrx.make_a_move(mtrx.pick_a_move())
         a = mtrx.matrix_to_string_conversion()
-        return HttpResponse(a)
+        arr = [a, "хуйня"]
+        return HttpResponse(arr)
     else:
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}

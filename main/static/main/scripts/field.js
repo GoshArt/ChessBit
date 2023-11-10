@@ -396,6 +396,7 @@ function buttonSurrender(){
     });
 }
 function onAjaxSuccess(data) {
+        console.log(data)
         map = data.split('');
         if(color==='black'){
             reverseMap();
