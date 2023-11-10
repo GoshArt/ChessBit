@@ -20,8 +20,8 @@ body{
     pointer-events: none;
 }
 .img-avatar-card {
-    width: 45px;
-    height: 45px;
+     width: 3rem;
+    height: 3rem;
     background-color: #ffffff;
     border: 2px solid #1B1217;
     -moz-user-select: none; -khtml-user-select: none; user-select: none;
@@ -74,8 +74,8 @@ body{
 }
 
 .result {
-    width: 45px;
-    height: 45px;
+ width: 3rem;
+    height: 3rem;
     border-radius: 10px;
     padding: 0;
 }
@@ -96,6 +96,7 @@ body{
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 .history a{
     text-decoration: none;
     color: #1B1217;

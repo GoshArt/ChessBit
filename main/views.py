@@ -10,7 +10,6 @@ import random
 
 def index(request):
 
-    print("test")
     auth = False
     # pos = Users.objects.get(nickname="noksyte2")
     # print(1)
@@ -85,8 +84,13 @@ def index(request):
             auth = True
             name = request.session["name"]
 
-    print(auth)
-    return render(request, 'main/index.html', {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error})
+    best_players = []
+    players_name = ["Данияр", "Артём", "Георгий", "Артур", "Азалия", "Ева", "Рин", "Кустик", "Христофор Волк", "Александр"]
+    for i in range(10):
+        best_player = {"name": players_name[i], "res": random.randint(400,2000), "gamer_id": "2", }
+        best_players.append(best_player)
+    best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
+    return render(request, 'main/index.html', {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error,  "best_players": best_players})
 
 
 def waiting(request):
@@ -147,12 +151,10 @@ def is_ajax(request):
 
 @csrf_exempt
 def field(request):
-    if "auth" in request.session:
-        if request.session["auth"]:
-            name = request.session["name"]
+    if request.session["auth"]:
+        name = request.session["name"]
 
     if 'botColor' in request.session:
-        print(request.session['botColor'])
         if 'currentPosition' not in request.session:
             request.session['currentPosition'] = basic_matrix2D
 

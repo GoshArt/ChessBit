@@ -330,13 +330,13 @@ function whichKingLoss(){
     }
 }
 function changePawn(coord){
-    let selectFigureModal = new bootstrap.Modal(document.getElementById('selectFigureModal'), )
+    let selectFigureModal = new bootstrap.Modal(document.getElementById('selectFigureModal'))
     selectFigureModal.show()
-    let select_knight = document.getElementById('select_knight');
     let select_bishop = document.getElementById('select_bishop');
     let select_rook = document.getElementById('select_rook');
     let select_queen = document.getElementById('select_queen');
-    select_knight.addEventListener('click', () => {
+    let select_knight = document.getElementById('select_knight');
+     const selectKnightListener = function (event) {
         if (color === "white"){
             map[coord] = "N"
         }else
@@ -344,8 +344,9 @@ function changePawn(coord){
         showFigures(map.join(""));
         updateFigures();
         selectFigureModal.hide()
-    });
-    select_bishop.addEventListener('click', () => {
+    };
+
+     const selectBishopListener = function (event) {
         if (color === "white"){
             map[coord] = "B"
         }else
@@ -353,8 +354,8 @@ function changePawn(coord){
         showFigures(map.join(""));
         updateFigures();
         selectFigureModal.hide()
-    });
-    select_rook.addEventListener('click', () => {
+    };
+     const selectRookListener = function (event) {
         if (color === "white"){
             map[coord] = "R"
         }else
@@ -362,8 +363,8 @@ function changePawn(coord){
         showFigures(map.join(""));
         updateFigures();
         selectFigureModal.hide()
-    });
-    select_queen.addEventListener('click', () => {
+    };
+     const selectQueenListener = function (event) {
         if (color === "white"){
             map[coord] = "Q"
         }else
@@ -371,7 +372,19 @@ function changePawn(coord){
         showFigures(map.join(""));
         updateFigures();
         selectFigureModal.hide()
-    });
+    };
+
+    select_knight.addEventListener('click', selectKnightListener);
+    select_knight.removeEventListener('click', selectKnightListener);
+
+    select_bishop.addEventListener('click', selectBishopListener);
+    select_bishop.removeEventListener('click', selectBishopListener);
+
+    select_rook.addEventListener('click', selectRookListener);
+    select_rook.removeEventListener('click', selectRookListener);
+
+    select_queen.addEventListener('click', selectQueenListener);
+    select_rook.removeEventListener('click', selectQueenListener);
 
 }
 function buttonSurrender(){
