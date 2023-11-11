@@ -1,4 +1,6 @@
 from random import random
+
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +11,6 @@ import random
 
 
 def index(request):
-
     auth = False
     # pos = Users.objects.get(nickname="noksyte2")
     # print(1)
@@ -63,6 +64,7 @@ def index(request):
                 new_user.password = f_password
                 new_user.email = email
                 new_user.save()
+                request.session['id'] = Users.objects.get(nickname=name).id
                 request.session['auth'] = True
                 request.session['name'] = name
                 request.session['password'] = f_password
@@ -85,12 +87,15 @@ def index(request):
             name = request.session["name"]
 
     best_players = []
-    players_name = ["Данияр", "Артём", "Георгий", "Артур", "Азалия", "Ева", "Рин", "Кустик", "Христофор Волк",
-                    "Александр"]
-    for i in range(10):
-        best_player = {"name": players_name[i], "res": random.randint(400, 2000), "gamer_id": "2", }
-        best_players.append(best_player)
-    best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
+    best_players_db = Users.objects.order_by('rating_elo').reverse().all()
+    p = 1
+    for player in best_players_db:
+        best_players.append({"name": player.nickname, "res": player.rating_elo})
+        if p == 10:
+            break
+        p += 1
+    print("huynya")
+    # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
                   {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players})
 
@@ -153,12 +158,31 @@ def is_ajax(request):
 
 @csrf_exempt
 def field(request):
-    if request.session["auth"]:
+    if "auth" not in request.session:
+        return redirect(index)
+    if not request.session["auth"]:
+        return redirect(index)
+    else:
         name = request.session["name"]
 
-    if 'botColor' in request.session:
-        if 'currentPosition' not in request.session:
-            request.session['currentPosition'] = basic_matrix2D
+    # if 'botColor' in request.session:
+    #     if 'currentPosition' not in request.session:
+    #         request.session['currentPosition'] = basic_matrix2D
+    if request.method == "GET":
+        # current_games = Games.objects.filter(
+        #     (Q(white_player=request.session['id']) | Q(black_player=request.session['id']))).exclude(result=1)
+        # current_games1 = GameParticipants.objects.get(user_id=1).game.white_player
+        # print(current_games1.white_player)
+        # print(current_games1.black_player)
+        # print(current_games1.game.objects.all())
+        # u = Users.objects.get(id=1).gameparticipants_set.all() # collecting all the data from gameparticipants table where user_id == 1
+        # for item in u:
+        #     print(item.user_id, item.game_id)
+        # current_games1.get
+        current_active_games = GameParticipants.objects.filter(participant_id=1).select_related("user").select_related(
+            "game")
+        for retard in current_active_games:
+            print(retard.user_id, retard.user.nickname, retard.game_id, retard.participant_id, retard.game.white_player)
 
     if request.method == "POST" and is_ajax(request=request):
         a = request.POST["map"]
@@ -170,6 +194,7 @@ def field(request):
     else:
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
+
         botArtem = {"name": "Bot Artem v0.1", "avatar": "main/img/robot.svg", "rating": '200'}
         botColor = request.session['botColor']
         return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'line': pos_str,
