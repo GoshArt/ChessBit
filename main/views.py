@@ -87,10 +87,9 @@ def index(request):
         if p == 10:
             break
         p += 1
-    print("huynya")
     # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
-                  {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players})
+                  {"name": "polniy testecz", "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players})
 
 
 def waiting(request):
