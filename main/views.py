@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from main.GameLogic.create_basic_matrix import *
-
+from main.bd_logic import *
 from .models import *
 import random
 
@@ -27,23 +27,14 @@ def index(request):
     url_avatar = 'main/img/person.svg'
     error = ""
 
-    print(request.POST)
-
     if request.method == "GET":
-        print("GET")
         pass
-        # if "re_password" in request.GET:
-        #     print(request.GET)
-
     elif request.method == "POST":
-        # print("POST")
-        print(request.POST)
-
         if "username" in request.POST:
             username = request.POST["username"]
             password = request.POST["password"]
-            user = Users.objects.filter(nickname=username, password=password)
 
+            user = Users.objects.filter(nickname=username, password=password)
             if user:
                 request.session['auth'] = True
                 request.session['name'] = username
@@ -55,7 +46,9 @@ def index(request):
             email = request.POST["email"]
             f_password = request.POST["f_password"]
             re_password = request.POST["re_password"]
-
+            if len(Users.objects.filter(nickname=name)) > 0:
+                #по идее лучше просто выводить ошибку что такой пользователь уже существует
+                return redirect(index)
             if f_password != re_password:
                 error = "Неверный пароль"
             else:
@@ -108,12 +101,55 @@ def waiting(request):
 
 
 def profile(request):
+    if request.method == "GET":
+
+        # Here we are getting required information about specified user.
+        # User can be specified by id, name parameter or nothing(in that case user will get their own profile).
+        # priority: name > id > nothing.
+        user_data = ''
+        if "name" in request.GET:
+            user_data = find_user_data_by_name(request.GET["name"])
+        elif "id" in request.GET:
+            user_data = find_user_data_by_id(request.GET["id"])
+        else:
+            user_data = find_user_data_by_id(request.session['id'])
+
+        id = user_data.id
+        rating = user_data.rating_elo
+        name = user_data.nickname
+        url_avatar = 'main/img/person.svg'  # заглушка
+        email = user_data.email
+        reg = "11.09.2001"  # заглушка
+
+        games = []
+        for i in range(10):
+            res = random.randint(-1, 1)
+            game = {"name": "Георгий", "avatar": "main/img/person.svg", "res": res, "date": "23.02.2022",
+                    "game_id": "2",
+                    "history_id": "2"}
+            games.append(game)
+        # id = request.GET.get("id")
+        # name = request.session["name"]
+        # if "email" not in request.session:
+        #     request.session["email"] = Users.objects.get(nickname=name).email
+        # email = request.session["email"]
+
+        # rating = random.randint(500, 1200)
+
+        return render(request, 'main/profile.html',
+                      {"games": games, "id": id, "rating": rating, "name": name,
+                       "url_avatar": url_avatar,
+                       "email": email,
+                       "reg": reg})
+
     if request.method == "POST":
         if "username" in request.POST:
             pos = Users.objects.get(nickname=request.session["name"])
             pos.nickname = request.POST["username"]
             pos.save()
             request.session["name"] = request.POST["username"]
+            return redirect(profile)
+
         if "deletion" in request.POST:
             pos = Users.objects.get(nickname=request.session["name"])
             pos.delete()
@@ -121,25 +157,6 @@ def profile(request):
             request.session['auth'] = False
             print("retard")
             return redirect(index)
-
-    games = []
-    for i in range(10):
-        res = random.randint(-1, 1)
-        game = {"name": "Георгий", "avatar": "main/img/person.svg", "res": res, "date": "23.02.2022", "game_id": "2",
-                "history_id": "2"}
-        games.append(game)
-    id = request.GET.get("id")
-    name = request.session["name"]
-    print(Users.objects.get(nickname=name).email)
-    if "email" not in request.session:
-        request.session["email"] = Users.objects.get(nickname=name).email
-    email = request.session["email"]
-    reg = "11.09.2001"
-    rating = random.randint(500, 1200)
-    url_avatar = 'main/img/person.svg'
-    return render(request, 'main/profile.html',
-                  {"games": games, "id": id, "rating": rating, "name": name, "url_avatar": url_avatar, "email": email,
-                   "reg": reg})
 
 
 def servers(request):

@@ -7,7 +7,7 @@
             </div>
             <div class="col" >
                 {% if auth == True %}
-                    <a href="/profile?id={{id}}" class="h2">{{ name }}</a>
+                    <a href="/profile" class="h2">{{ name }}</a>
                 {% else %}
                     <a data-bs-toggle="modal" data-bs-target="#warningModal" class="name-avatar-mini" type="button" >Гость</a>
                 {% endif %}
