@@ -1,6 +1,6 @@
 from random import random
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from main.GameLogic.create_basic_matrix import *
 
@@ -9,6 +9,7 @@ import random
 
 
 def index(request):
+
     auth = False
     # pos = Users.objects.get(nickname="noksyte2")
     # print(1)
@@ -165,8 +166,7 @@ def field(request):
         mtrx.collect_all_possible_moves(request.session["botColor"])
         mtrx.make_a_move(mtrx.pick_a_move())
         a = mtrx.matrix_to_string_conversion()
-        arr = [a, "хуйня"]
-        return HttpResponse(arr)
+        return JsonResponse({"map": a})
     else:
         pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
