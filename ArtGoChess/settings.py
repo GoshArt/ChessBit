@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'ArtGoChess.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DBENGINE = 'django.db.backends.postgresql' if DEBUG else 'django.db.backends.mysql'
+DBENGINE = 'django.db.backends.postgresql'
 
 DATABASES = {
     'default': {
