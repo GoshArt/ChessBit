@@ -53,8 +53,8 @@ class Users(models.Model):
     nickname = models.CharField()
     email = models.CharField(blank=True, null=True)
     year_of_birth = models.BigIntegerField(blank=True, null=True)
-    rating_elo = models.BigIntegerField(blank=True, null=True)
-    rating_puzzles = models.BigIntegerField(blank=True, null=True)
+    rating_elo = models.BigIntegerField(blank=True, null=True, default=1200)
+    rating_puzzles = models.BigIntegerField(blank=True, null=True, default=1200)
     password = models.CharField(blank=True, null=True)
     role = models.TextField(blank=True, null=True)  # This field type is a guess.
 
