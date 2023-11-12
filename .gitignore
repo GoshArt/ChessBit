@@ -1,15 +1,17 @@
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm,django
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,django
-
 ### Django ###
 *.log
 *.pot
 *.pyc
-__pycache__/
+**/__pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+
+# all static
+productionfiles/
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -171,10 +173,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+<<<<<<< HEAD
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+=======
+>>>>>>> eba208a48c1abf34fcf372c58b23b98213f55288
 # CMake
 cmake-build-*/
 
@@ -192,6 +197,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+<<<<<<< HEAD
 
 ### PyCharm Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
@@ -203,3 +209,5 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,django
 node_modules/
+=======
+>>>>>>> eba208a48c1abf34fcf372c58b23b98213f55288
