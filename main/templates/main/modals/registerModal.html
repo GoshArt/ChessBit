@@ -19,14 +19,18 @@
                         <input class="col-6" id="f_password" type="password" name="f_password">
                     </div>
                     <div class="row mt-2">
-                        <label class="col-6"  for="re_password">Повтор пароля</label>
+                        <label class="col-6" for="re_password">Повтор пароля</label>
                         <input class="col-6" id="re_password" type="password" name="re_password">
                     </div>
+                    <div class="errorValidation h6 offset-6 col-6 mt-2">
+                        {{ registerError }}
+                    </div>
                     <div class="row mt-1">
-                        <a class="p" data-bs-target="#logInModal" data-bs-toggle="modal" data-bs-dismiss="modal">У вас уже есть аккаунт? Войдите</a>
+                        <a class="p" data-bs-target="#logInModal" data-bs-toggle="modal" data-bs-dismiss="modal">У вас
+                            уже есть аккаунт? Войдите</a>
                     </div>
                     <div class="row mt-4">
-                         <input type="submit" class="col-4 mx-auto btn btn-secondary" value="Войти">
+                        <input type="submit" class="col-5 mx-auto btn btn-secondary" value="Зарегистрироваться">
                     </div>
                 </form>
             </div>

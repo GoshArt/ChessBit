@@ -18,7 +18,7 @@
         {% endif %}
         {#        <a class="btn btn-primary btn-lg mt-3 p-2" data-bs-toggle="modal" data-bs-target="#createUiModal" type="button" >Игра с компьютером</a>#}
 
-        <div class="position-fixed col-2 d-none d-lg-block top-50 translate-middle" style="left: 80%">
+        <div class="position-fixed col-2 col-md-3 col-lg-2 d-none d-lg-none d-xl-block top-50 translate-middle" style="left: 80%">
             <p class=" p-2 text-center h3">Лидеры</p>
             <div class="row c-card ">
                 <div class="row" style="margin-left: 0">
@@ -28,7 +28,8 @@
                 </div>
                 {% for player in best_players %}
                     <div class="row" style="margin-left: 0">
-                        <h6 class="col">{{ player.name }}</h6>
+                        <a href="/profile?name={{ player.name }}"
+                           class="col h6 text-decoration-none">{{ player.name }}</a>
                         <h6 class="col-4 text-center">{{ player.res }}</h6>
                         {% if player != best_players.9 %}
                             <hr style="margin-bottom: 2px">
@@ -37,10 +38,37 @@
                 {% endfor %}
             </div>
         </div>
+
+        <div class="col-10 d-xl-none d-lg-block d-md-block d-sm-block d-block mx-auto">
+            <p class=" p-2 text-center h3">Лидеры</p>
+            <div class="row c-card ">
+                <div class="row" style="margin-left: 0">
+                    <h5 class="col">Игрок</h5>
+                    <h5 class="col-md-5 col-lx-4 col-sm-5 col-6 text-center">Рейтинг</h5>
+                    <hr style="margin-bottom: 4px">
+                </div>
+                {% for player in best_players %}
+                    <div class="row" style="margin-left: 0">
+                        <a href="/profile?name={{ player.name }}"
+                           class="col h6 text-decoration-none">{{ player.name }}</a>
+                        <h6 class="col-4 text-center">{{ player.res }}</h6>
+                        {% if player != best_players.9 %}
+                            <hr style="margin-bottom: 2px">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
     </div>
     {% include 'main/modals/warningModal.html' %}
     {% include 'main/modals/registerModal.html' %}
     {% include 'main/modals/logInModal.html' %}
     {% include 'main/modals/createUiModal.html' %}
     {% include 'main/modals/createModal.html' %}
+    <input type="hidden" id="loginErrorHidden" name="variable" value="{{ loginError }}">
+    <input type="hidden" id="registerErrorHidden" name="variable" value="{{ registerError }}">
+    <script src="{% static "main/scripts/jquery.min.js" %}"></script>
+    <script src="{% static "main/scripts/errorHandler.js" %}"></script>
 {% endblock %}

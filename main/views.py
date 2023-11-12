@@ -88,11 +88,12 @@ def index(request):
     players_name = ["Данияр", "Артём", "Георгий", "Артур", "Азалия", "Ева", "Рин", "Кустик", "Христофор Волк",
                     "Александр"]
     for i in range(10):
-        best_player = {"name": players_name[i], "res": random.randint(400, 2000), "gamer_id": "2", }
+        best_player = {"name": players_name[i], "res": random.randint(400, 2000)}
         best_players.append(best_player)
     best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
-                  {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players})
+                  {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players,
+                   "loginError": "", "registerError": ""})
 
 
 def waiting(request):

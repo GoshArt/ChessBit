@@ -10,7 +10,6 @@ fieldResolution();
 $(function () {
     start()
     pressSquare();
-
 });
 $(window).resize(function () {
     fieldResolution();
@@ -19,8 +18,8 @@ $(window).resize(function () {
 function start() {
     map = document.getElementById("startMap").value.split('');
     addSquares();
+    showFigures(map.join(""));
     if (color === "black") {
-        reverseMap()
         $.post(
             "/field",
             {
@@ -29,7 +28,6 @@ function start() {
             changeMap,
         );
     }
-    showFigures(map.join(""));
     buttonSurrender();
 } //первичный запуск
 function pressSquare() {
@@ -59,13 +57,12 @@ function viewMoveFigure(map) { //выводит на поле отображен
             sq.style.border = "";
         }
     }
-}
-
+} // отображение возможных ходов
 function clearMoveMap() {
     for (let i = 64; i < 128; i++) {
         map[i] = '0'
     }
-    viewMoveFigure()
+    viewMoveFigure(map)
 } //очистка поля от ходов
 function addSquares() {
     $('.board').html('');
@@ -120,26 +117,19 @@ function getChessSymbol(figure) {
 function isBlackSquareAt(coord) {
     return (coord % 8 + Math.floor(coord / 8)) % 2;
 } //создание поля
-function whichKingLoss() {
+function whichKingLoss(data) {
+    const response = JSON.parse(data);
     let resultModal = new bootstrap.Modal(document.getElementById('resultModal'),)
-    if ((!map.includes('k') && color === "white") || (!map.includes('K') && color === "black")) { //победа
+    if (response.res === "Win") { //победа
         result_str.innerHTML = `Поздравляем, вы победили! Вражеский король повержен. Сыграйте снова и закрепите свой успех.`;
         resultModal.show()
-        return true
-    } else if ((!map.includes('K') && color === "white") || (!map.includes('k') && color === "black")) {
+    } else if (response.res === "Lose") {
         result_str.innerHTML = `К сожалению вы потерпели поражение и ваш король пал. Вы проиграли! Попробуйте заново и победите!`;
         resultModal.show()
-        return true
-    } else {
-        return false
     }
 } //переделать для вывода информации
 function changePawn(coord) {
     let selectFigureModal = new bootstrap.Modal(document.getElementById('selectFigureModal'))
-    $('#selectFigureModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
     selectFigureModal.show();
 
     let select_bishop = document.getElementById('select_bishop');
@@ -186,7 +176,7 @@ function changePawn(coord) {
 
     select_queen.addEventListener('click', selectQueenListener);
     select_rook.removeEventListener('click', selectQueenListener);
-} //потестить на закрываемость
+} //Выбор фигуры для изменения
 function buttonSurrender() {
     $.post(
         "/field",
@@ -198,25 +188,29 @@ function buttonSurrender() {
 } //Вызов функции сдачи
 function changeMap(data) {
     const response = JSON.parse(data);
+    map = response.map;
     if (response.turnType === "Selected" || response.turnType === "NoSelected") {
-        viewMoveFigure(response.map)
-    } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {
-        showFigures(response.map.join(""))
+        viewMoveFigure(getVisualMap(map).join(""))
+    } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {1
+        showFigures(getVisualMap(map).join(""))
         clearMoveMap();
     }
     if (response.turnType === "Correct"){
-        //добавить код смены хода
+        turn = response.turnColor;
     }
 
-} //Должно работать
-function reverseMap() {
-    return [...map.slice(0, 64).reverse(), ...map.slice(64, 128)]
-} //визуально разворачивает карту
+} //Обработка запросов на изменение карты, должно работать
+function getVisualMap(field) {
+    if(color === "black"){
+        return [...field.slice(0, 64).reverse(), ...field.slice(64, 128).reverse()]
+    }else {
+        return field
+    }
+} //визуально разворачивает карту если надо
 function fieldResolution() {
     var width = $('.board').width();
     $('.board').height(width);
-}
-
+} //Изменяет разрешение поля
 function getCoordinates(coord) {
     let x = coord % 8;
     let y = (coord - (coord % 8)) / 8;
@@ -229,20 +223,14 @@ function sendPawnChange(figure) {
             figure: figure,
             type: "changePawn"
         },
-        pawnChangeRequest,
+        changeMap,
     );
 }
-
 function pawnChangeRequest(data) {
     //тут должна быть функция
 } //дописать
-
 function viewModalGaveUp() {
     let resultModal = new bootstrap.Modal(document.getElementById('resultModal'))
-    $('#resultModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
     let admit_defeat_button = document.getElementById('admit-defeat-button');
     admit_defeat_button.addEventListener('click', () => {
         result_str.innerHTML = `К сожалению вы сдались и ваш король пал. \n Вы проиграли!\nПопробуйте заново и попытайтесь победить!`;

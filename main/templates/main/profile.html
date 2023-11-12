@@ -29,7 +29,10 @@
         <div class="col text-center d-none d-lg-block">
             <a href="/" class="h1">ChessBit</a>
         </div>
-        <div class="changeAccount row col-lg-6 col-12 offset-1 p-0 mt-4">
+        <div class="changeAccount row col-12 offset-1 p-0 mt-4">
+             <div class="col-2 m-0 mt-1" style="width: max-content">
+                 <a type="submit" href="/" class="btn btn-secondary">Вернуться в меню</a>
+            </div>
             <div class="col-2 m-0 mt-1" style="width: max-content">
                 <form action="/" method="post">{% csrf_token %}
                     <input type="submit" class="btn btn-secondary" value="Выйти из аккаунта">
