@@ -216,18 +216,18 @@ class Matrix:
 # mtrx.pieces_on_board[0][0] = mtrx.pieces_on_board[0][1]
 # mtrx.pieces_on_board[0][1] = EmptyPiece()
 # print(1)
-mtrx = Matrix(castle_check_matrix)
-print(mtrx.collect_all_possible_moves("W"))
-print(mtrx.pos_moves)
-for row in mtrx.matrix:
-    print(row)
-mtrx.make_a_move('0-0-0')
-for item in mtrx.pieces_on_board:
-    for piece in item:
-        print(type(piece), end="")
-    print()
-mtrx.make_a_move('0-0')
-for item in mtrx.pieces_on_board:
-    for piece in item:
-        print(type(piece), end="")
-    print()
+# mtrx = Matrix(castle_check_matrix)
+# print(mtrx.collect_all_possible_moves("W"))
+# print(mtrx.pos_moves)
+# for row in mtrx.matrix:
+#     print(row)
+# mtrx.make_a_move('0-0-0')
+# for item in mtrx.pieces_on_board:
+#     for piece in item:
+#         print(type(piece), end="")
+#     print()
+# mtrx.make_a_move('0-0')
+# for item in mtrx.pieces_on_board:
+#     for piece in item:
+#         print(type(piece), end="")
+#     print()
