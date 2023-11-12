@@ -25,6 +25,17 @@ basic_matrix1 = [
     ["", "", "", "", "", "", "", ""],  # 1
 ]  # a     b     c    d     e     f    g     h
 
+castle_check_matrix = [
+    ["♜", " ", "", "", "♚", "", "", "♜"],  # 8
+    [" ", "", "", "", "", "", "", ""],  # 7
+    [" ", " ", " ", " ", " ", "", " ", ""],  # 6
+    [" ", " ", "", " ", " ", " ", " ", " "],  # 5
+    [" ", " ", " ", " ", "", " ", " ", " "],  # 4
+    [" ", " ", " ", " ", " ", " ", " ", " "],  # 3
+    ["", "", "", "", "", "", "", ""],  # 2
+    ["♖", "", "", "", "♔", "", "", "♖"],  # 1
+]  # a    b    c    d   e    f    g     h
+
 
 class Matrix:
 
@@ -34,6 +45,7 @@ class Matrix:
 
         self.size = 8
         self.matrix = matrix
+        self.current_move = 1
         self.moves_played = ""
         self.alpha = "ABCDEFGH"
         self.alpha_to_num = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8}
@@ -129,16 +141,39 @@ class Matrix:
                 if type(self.pieces_on_board[y][x]) != EmptyPiece and self.pieces_on_board[y][x].color == color:
                     self.pieces_on_board[y][x].find_possible_moves(self)
                     for move in self.pieces_on_board[y][x].pos_moves:
-                        self.pos_moves.add(str(self.alpha[x]) + str(y + 1) + "->" + move)
+                        if move == "0-0" or move == "0-0-0":
+                            self.pos_moves.add(move)
+                        else:
+                            self.pos_moves.add(str(self.alpha[x]) + str(y + 1) + "->" + move)
         return self.pos_moves
 
     def make_a_move(self, move_str):
-        x1 = self.alpha_to_num[move_str[0]]
-        y1 = int(move_str[1])
-        x2 = self.alpha_to_num[move_str[4]]
-        y2 = int(move_str[5])
-        self.pieces_on_board[y2 - 1][x2 - 1] = self.pieces_on_board[y1 - 1][x1 - 1]
-        self.pieces_on_board[y1 - 1][x1 - 1] = EmptyPiece()
+        if move_str == "0-0" or "0-0-0":
+            y = 7  # king's row
+            x = 4  # king's column
+            king_dif = 2
+            rook_dif = -2
+            rook_x = 7
+            if self.current_move % 2 == 0:
+                y = 0
+            if move_str == "0-0-0":
+                rook_x = 0
+                rook_dif = 3
+                king_dif = -2
+            print(y,x)
+            self.pieces_on_board[y][x + king_dif] = self.pieces_on_board[y][x]
+            self.pieces_on_board[y][x] = EmptyPiece()
+            self.pieces_on_board[y][rook_x + rook_dif] = self.pieces_on_board[y][rook_x]
+            self.pieces_on_board[y][rook_x] = EmptyPiece()
+
+        else:
+            x1 = self.alpha_to_num[move_str[0]]
+            y1 = int(move_str[1])
+            x2 = self.alpha_to_num[move_str[4]]
+            y2 = int(move_str[5])
+            self.pieces_on_board[y2 - 1][x2 - 1] = self.pieces_on_board[y1 - 1][x1 - 1]
+            self.pieces_on_board[y1 - 1][x1 - 1] = EmptyPiece()
+        self.current_move += 1
 
     def matrix_to_string_conversion(self):
         result = ""
@@ -181,3 +216,18 @@ class Matrix:
 # mtrx.pieces_on_board[0][0] = mtrx.pieces_on_board[0][1]
 # mtrx.pieces_on_board[0][1] = EmptyPiece()
 # print(1)
+mtrx = Matrix(castle_check_matrix)
+print(mtrx.collect_all_possible_moves("W"))
+print(mtrx.pos_moves)
+for row in mtrx.matrix:
+    print(row)
+mtrx.make_a_move('0-0-0')
+for item in mtrx.pieces_on_board:
+    for piece in item:
+        print(type(piece), end="")
+    print()
+mtrx.make_a_move('0-0')
+for item in mtrx.pieces_on_board:
+    for piece in item:
+        print(type(piece), end="")
+    print()

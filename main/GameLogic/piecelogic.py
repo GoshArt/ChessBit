@@ -15,6 +15,7 @@ class EmptyPiece:
         self.symbol = "X"
         self.pos_moves = set()
         self.move_types = []
+        self.moved = 0
 
     def find_possible_moves(self, matrix):
         # Function calls each movement type checker that this piece has
@@ -55,6 +56,18 @@ class EmptyPiece:
             self.pos_moves.add(self.alpha[x] + str(y + 1))
             return 1
         return 0
+
+    def first_piece_to_the_left(self, matrix):
+        for x in range(self.x - 1, -1, -1):
+            if type(matrix.pieces_on_board[self.y][x]) != EmptyPiece:
+                return matrix.pieces_on_board[self.y][x]
+        return EmptyPiece()
+
+    def first_piece_to_the_right(self, matrix):
+        for x in range(self.x + 1, matrix.size):
+            if type(matrix.pieces_on_board[self.y][x]) != EmptyPiece:
+                return matrix.pieces_on_board[self.y][x]
+        return EmptyPiece()
 
     def horizontal_check(self, matrix):
         # Function generates all horizontal coordinates moving away from the piece and checks them
@@ -114,6 +127,15 @@ class EmptyPiece:
         # Overridden by Pawn class due to movement specifications
         pass
 
+    def castle(self, matrix):
+        if type(self) == King and not self.moved:
+            left_figure = self.first_piece_to_the_left(matrix)
+            right_figure = self.first_piece_to_the_right(matrix)
+            if type(left_figure) == Rook and not left_figure.moved:
+                self.pos_moves.add("0-0")
+            if type(right_figure) == Rook and not right_figure.moved:
+                self.pos_moves.add("0-0-0")
+
 
 class Pawn(EmptyPiece):
 
@@ -121,7 +143,6 @@ class Pawn(EmptyPiece):
         super().__init__(y, x, color)
         self.cost = 1
         self.symbol = "♙" if color == "W" else "♟"
-        self.moved = 0
         self.move_types = [self.pawn_check]
 
     def pawn_check(self, matrix):
@@ -181,7 +202,7 @@ class King(EmptyPiece):
         super().__init__(y, x, color)
         self.cost = 69
         self.symbol = "♔" if color == "W" else "♚"
-        self.move_types = [self.king_check]
+        self.move_types = [self.king_check, self.castle]
 
 # P = Pawn(2, 1, "W")
 # R = Rook(3, 3, "W")

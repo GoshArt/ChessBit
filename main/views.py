@@ -47,7 +47,7 @@ def index(request):
             f_password = request.POST["f_password"]
             re_password = request.POST["re_password"]
             if len(Users.objects.filter(nickname=name)) > 0:
-                #по идее лучше просто выводить ошибку что такой пользователь уже существует
+                # по идее лучше просто выводить ошибку что такой пользователь уже существует
                 return redirect(index)
             if f_password != re_password:
                 error = "Неверный пароль"
@@ -122,11 +122,33 @@ def profile(request):
         reg = "11.09.2001"  # заглушка
 
         games = []
-        for i in range(10):
-            res = random.randint(-1, 1)
-            game = {"name": "Георгий", "avatar": "main/img/person.svg", "res": res, "date": "23.02.2022",
-                    "game_id": "2",
-                    "history_id": "2"}
+        collected_games_data = GameParticipants.objects.filter(user_id=id).select_related(
+            'user').select_related('game')
+
+        print(collected_games_data)
+        enemy_guy = ""
+        for games_data in collected_games_data:
+            guys_data = Users.objects.filter(Q(id=games_data.game.white_player) | Q(id=games_data.game.black_player))
+            for i in range(2):
+                if guys_data[i].nickname != name:
+                    enemy_guy = guys_data[i].nickname
+
+            print("W player:", games_data.game.white_player)
+            print("B player:", games_data.game.black_player)
+            print("Result:", games_data.game.result)
+            print("Finished", games_data.game.finished)
+            print("MainUserNickName", name + " VS " + enemy_guy)
+
+        versus = name + "VS" + enemy_guy
+
+        for i in range(min(10, len(collected_games_data))):
+            games_data = collected_games_data[i]
+            game = {"name": versus,
+                    "avatar": "main/img/person.svg",
+                    "res": games_data.game.result,
+                    "date": "23.02.2022",
+                    "game_id": games_data.game_id,
+                    }
             games.append(game)
         # id = request.GET.get("id")
         # name = request.session["name"]
@@ -135,7 +157,7 @@ def profile(request):
         # email = request.session["email"]
 
         # rating = random.randint(500, 1200)
-
+        print(games)
         return render(request, 'main/profile.html',
                       {"games": games, "id": id, "rating": rating, "name": name,
                        "url_avatar": url_avatar,
