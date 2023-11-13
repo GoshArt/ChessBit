@@ -149,49 +149,86 @@ def profile(request):
 
         games = []
         collected_games_data = GameParticipants.objects.filter(user_id=id).select_related(
-            'user').select_related('game')
+            'user').select_related('game').filter(~Q(game__result="active"))
 
-        print(collected_games_data)
+        for item in collected_games_data:
+            print(item.game.result)
         enemy_guy = ""
         for games_data in collected_games_data:
-            guys_data = Users.objects.filter(Q(id=games_data.game.white_player) | Q(id=games_data.game.black_player))
-            for i in range(2):
-                if guys_data[i].nickname != name:
-                    enemy_guy = guys_data[i].nickname
-
-            print("W player:", games_data.game.white_player)
-            print("B player:", games_data.game.black_player)
+            game_id = games_data.game_id
+            enemy_guy = GameParticipants.objects.get(Q(game_id=game_id) & ~Q(user_id=id))
+            # guys_data = Users.objects.filter(Q(id=games_data.game.white_player) | Q(id=games_data.game.black_player))
+            #
+            # for i in range(2):
+            #     if guys_data[i].nickname != name:
+            #         enemy_guy = guys_data[i].nickname
             print("Result:", games_data.game.result)
-            print("Finished", games_data.game.finished)
-            print("MainUserNickName", name + " VS " + enemy_guy)
-        versus = name + "VS" + enemy_guy
+            print("MainUserNickName", name + " VS " + enemy_guy.user.nickname)
+            versus = name + "VS" + enemy_guy.user.nickname
+            print(versus)
+            left_part = games_data.user_color
+            right_part = "B"
+            if left_part == right_part:
+                right_part = "W"
+            left_result = games_data.game.result
 
-        if id == games_data.game.white_player:
-            side = 1
-        else:
-            side = -1
-        if (games_data.game.result == 1 and side == 1) or (games_data.game.result == -1 and side == -1):
-            fr = ' 1'
-            sr = ' 0'
-        else:
-            fr = ' 0'
-            sr = ' 1'
+            if left_result == "BlackVictory":
+                if left_part == "W":
+                    left_result = -1
+                    right_result = 1
+                else:
+                    left_result = 1
+                    right_result = -1
+            elif left_result == "WhiteVictory":
+                if left_part == "B":
+                    left_result = -1
+                    right_result = 1
+                else:
+                    left_result = 1
+                    right_result = -1
+            else:
+                left_result = 0
+                right_result = 0
 
-        for i in range(min(10, len(collected_games_data))):
-            games_data = collected_games_data[i]
-            game = {"name": name,
-                    "enemy": enemy_guy,
+            games.append(
+                {
+                    "name": name,
+                    "enemy": enemy_guy.user.nickname,
                     "avatar": "main/img/person.svg",
                     "res": games_data.game.result,
                     "date": "23.02.2022",
                     "game_id": games_data.game_id,
-                    "side": side,
-                    "fr": fr,
-                    "sr": sr,
-                    }
-            # print(games_data.game.result)
-            # print(side)
-            games.append(game)
+                    "side": left_part,
+                    "fr": left_result,
+                    "sr": right_result,
+                }
+            )
+        # if id == games_data.game.white_player:
+        #     side = 1
+        # else:
+        #     side = -1
+        # if (games_data.game.result == 1 and side == 1) or (games_data.game.result == -1 and side == -1):
+        #     fr = 1
+        #     sr = 0
+        # else:
+        #     fr = 0
+        #     sr = 1
+
+        # for i in range(min(10, len(collected_games_data))):
+        #     games_data = collected_games_data[i]
+        #     game = {"name": name,
+        #             "enemy": enemy_guy,
+        #             "avatar": "main/img/person.svg",
+        #             "res": games_data.game.result,
+        #             "date": "23.02.2022",
+        #             "game_id": games_data.game_id,
+        #             "side": side,
+        #             "fr": fr,
+        #             "sr": sr,
+        #             }
+        #     # print(games_data.game.result)
+        #     # print(side)
+        #     games.append(game)
         # id = request.GET.get("id")
         # name = request.session["name"]
         # if "email" not in request.session:
@@ -361,13 +398,8 @@ def field(request):
                         game_data.game.turn += 1
                         game_data.game.save()
                     else:
-                        print("retrying")
-                        print(mtrx.pos_moves)
                         mtrx.pos_moves.clear()
-                        print(mtrx.pos_moves)
-                        print(chosen_y, chosen_x, sep=":y x:")
                         mtrx.get_figure_moves(chosen_y, chosen_x, "W")
-                        print(mtrx.pos_moves)
                         chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
                         game_data.game.chessboard_position = chess_map
                         if len(mtrx.pos_moves) > 0:
