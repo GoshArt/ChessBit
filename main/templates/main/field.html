@@ -8,6 +8,8 @@
     <input type="hidden" id="botColor" name="variable" value="{{ botColor }}">  {#Если бот#}
     <input type="hidden" id="startMap" name="variable" value="{{ startMap }}">  {#мапа#}
     <input type="hidden" id="player1Color" name="variable" value="{{ player1.color }}">  {#цвет игрока#}
+    <input type="hidden" id="enemyType" name="variable" value="{{ enemyType }}">  {#тип врага#}
+    <input type="hidden" id="currentTurnIndex" name="variable" value="{{ currentTurnIndex }}">  {#чётность хода#}
     <div class="row mt-5">
         <div class="col-md-7 col-sm-12 offset-md-1 d-flex justify-content-end flex-column">
             <div class="board">
@@ -24,6 +26,13 @@
                         ({{ player2.rating }})</a>
                 </div>
             </div>
+
+            <div class="header row mt-1 d-flex align-items-center">
+                <div class="col-auto p-0" style="margin-left: 1rem">
+                    <p class="h5" id="turnVisual"></p>
+                </div>
+            </div>
+
             <div class="header row mt-1 d-flex align-items-center">
                 <div class="col-auto">
                     <img src="{% static player1.avatar %}" class="img-avatar-mini img-thumbnail img-fluid " alt="">

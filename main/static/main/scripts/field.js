@@ -4,8 +4,11 @@ let map;
 let df;
 let dsq;
 let botColor = document.getElementById("botColor").value;
+let enemyType = document.getElementById("enemyType").value;
+let currentTurnIndex = document.getElementById("currentTurnIndex").value;
+let turnVisual = document.getElementById("turnVisual").value;
+
 let color;
-let turn = 'white';
 fieldResolution();
 $(function () {
     start()
@@ -21,13 +24,14 @@ function start() {
     if (botColor === "W"){
         color = "black"
     }
+
     addSquares();
     showFigures(map.join(""));
     if (color === "black") {
         $.post(
             "/field",
             {
-                type: "firstMove"
+                type: "goMoveBot"
             },
             changeMap,
         );
@@ -212,16 +216,35 @@ function changeMap(data) {
     console.log(response)
     console.log(response.turnType === "Selected")
     console.log(map)
-    console.log(turn)
     if (response.turnType === "Selected" || response.turnType === "NoSelected") {
         viewMoveFigure(map)
-    } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {1
+    } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {
         showFigures(map.join(''))
         clearMoveMap();
     }
-    if (response.turnType === "Correct"){
-        turn = response.turnColor;
+    if (response.turnType === "Correct" ) {
+        currentTurnIndex = (+currentTurnIndex+1) % 2
     }
+    if(currentTurnIndex){
+        document.getElementById("turnVisual").innerHTML = "Сейчас ход белых";
+    }else {
+        document.getElementById("turnVisual").innerHTML = "Сейчас ход чёрных";
+    }
+    if(response.turnType === "botMove"){
+        showFigures(map.join(''))
+        currentTurnIndex = (+currentTurnIndex+1) % 2
+        console.log(botColorFun())
+    }
+    if (enemyType === "Bot" && botColorFun()) {
+        $.post(
+            "/field",
+            {
+                type: "goMoveBot"
+            },
+            changeMap,
+        );
+    }
+
 
 } //Обработка запросов на изменение карты, должно работать
 function fieldResolution() {
@@ -247,4 +270,7 @@ function pawnChangeRequest(data) {
     //тут должна быть функция
 } //дописать
 function viewModalGaveUp() {
+}
+function botColorFun() {//currentTurnIndex 1 - белый
+    return (currentTurnIndex === 1 && botColor === "W") || (currentTurnIndex === 0 && botColor === "B");
 }
