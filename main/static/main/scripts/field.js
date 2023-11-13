@@ -45,7 +45,8 @@ function pressSquare() {
             $.post(
                 "/field",
                 {
-                    coord: coord,
+                    y: coord[1],
+                    x: coord[0],
                     type: "pressSquare"
                 },
                 changeMap,
@@ -196,10 +197,13 @@ function buttonSurrender() {
 function changeMap(data) {
     const response = JSON.parse(data);
     map = response.map;
+    console.log(response)
+    console.log(response.turnType === "Selected")
+    console.log(getVisualMap(map))
     if (response.turnType === "Selected" || response.turnType === "NoSelected") {
-        viewMoveFigure(getVisualMap(map).join(""))
+        viewMoveFigure(getVisualMap(map))
     } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {1
-        showFigures(getVisualMap(map).join(""))
+        showFigures(getVisualMap(map))
         clearMoveMap();
     }
     if (response.turnType === "Correct"){
