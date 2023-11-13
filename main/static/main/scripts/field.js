@@ -17,6 +17,10 @@ $(window).resize(function () {
 
 function start() {
     map = document.getElementById("startMap").value.split('');
+    color = "white"
+    if (botColor === "W"){
+        color = "black"
+    }
     addSquares();
     showFigures(map.join(""));
     if (color === "black") {
@@ -74,18 +78,26 @@ function clearMoveMap() {
 } //очистка поля от ходов
 function addSquares() {
     $('.board').html('');
-    for (var coord = 0; coord < 64; coord++)
+    if (color === "black"){
+        for (let coord = 63; coord >= 0; coord--)
         $('.board').append(divSquare
             .replace('$coord', coord)
             .replace('$color',
                 isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
+    }else {
+        for (let coord = 0; coord < 64; coord++)
+        $('.board').append(divSquare
+            .replace('$coord', coord)
+            .replace('$color',
+                isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
+    }
+
 } //добавление ячеек поля
 function showFigures(figures) {
     for (let coord = 0; coord < 64; coord++)
         showFigureAt(coord, figures.charAt(coord))
 } //вывод фигур
 function showFigureAt(coord, figure) {
-    map[coord] = figure;
     $('#s' + coord).html(divFigure
         .replace('coord', coord)
         .replace('$figure', getChessSymbol(figure)))
@@ -196,14 +208,15 @@ function buttonSurrender() {
 } //Вызов функции сдачи
 function changeMap(data) {
     const response = JSON.parse(data);
-    map = response.map;
+    map = response.map.split('');
     console.log(response)
     console.log(response.turnType === "Selected")
-    console.log(getVisualMap(map))
+    console.log(map)
+    console.log(turn)
     if (response.turnType === "Selected" || response.turnType === "NoSelected") {
-        viewMoveFigure(getVisualMap(map))
+        viewMoveFigure(map)
     } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {1
-        showFigures(getVisualMap(map))
+        showFigures(map.join(''))
         clearMoveMap();
     }
     if (response.turnType === "Correct"){
@@ -211,13 +224,6 @@ function changeMap(data) {
     }
 
 } //Обработка запросов на изменение карты, должно работать
-function getVisualMap(field) {
-    if(color === "black"){
-        return [...field.slice(0, 64).reverse(), ...field.slice(64, 128).reverse()]
-    }else {
-        return field
-    }
-} //визуально разворачивает карту если надо
 function fieldResolution() {
     var width = $('.board').width();
     $('.board').height(width);

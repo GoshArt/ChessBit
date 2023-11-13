@@ -167,19 +167,15 @@ def profile(request):
             versus = name + "VS" + enemy_guy.user.nickname
             print(versus)
             left_part = games_data.user_color
-            right_part = "B"
-            if left_part == right_part:
-                right_part = "W"
             left_result = games_data.game.result
-
-            if left_result == "BlackVictory":
+            if left_result == '-1':
                 if left_part == "W":
                     left_result = -1
                     right_result = 1
                 else:
                     left_result = 1
                     right_result = -1
-            elif left_result == "WhiteVictory":
+            elif left_result == '1':
                 if left_part == "B":
                     left_result = -1
                     right_result = 1
@@ -194,7 +190,6 @@ def profile(request):
                 {
                     "name": name,
                     "enemy": enemy_guy.user.nickname,
-                    "avatar": "main/img/person.svg",
                     "res": games_data.game.result,
                     "date": "23.02.2022",
                     "game_id": games_data.game_id,
