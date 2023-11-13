@@ -35,6 +35,8 @@ def index(request):
             password = request.POST["password"]
 
             user = Users.objects.filter(nickname=username, password=password)
+            for u in user:
+                print(u.nickname, u.password)
             if user:
                 request.session['auth'] = True
                 request.session['name'] = username
@@ -72,6 +74,7 @@ def index(request):
             request.session['auth'] = False
             request.session['name'] = ""
             request.session['password'] = ""
+            request.session['id'] = ""
             print("done")
 
     if "auth" in request.session:
@@ -112,6 +115,7 @@ def profile(request):
         elif "id" in request.GET:
             user_data = find_user_data_by_id(request.GET["id"])
         else:
+            print(request.session['id'])
             user_data = find_user_data_by_id(request.session['id'])
 
         id = user_data.id
@@ -166,6 +170,7 @@ def profile(request):
 
     if request.method == "POST":
         if "username" in request.POST:
+            print(1)
             pos = Users.objects.get(nickname=request.session["name"])
             pos.nickname = request.POST["username"]
             pos.save()
@@ -173,12 +178,15 @@ def profile(request):
             return redirect(profile)
 
         if "deletion" in request.POST:
+            print(1)
             pos = Users.objects.get(nickname=request.session["name"])
             pos.delete()
             request.session["name"] = ""
+            request.session["id"] = ""
             request.session['auth'] = False
             print("retard")
             return redirect(index)
+        print(request.POST)
 
 
 def servers(request):
