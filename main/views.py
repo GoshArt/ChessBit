@@ -8,6 +8,7 @@ from main.GameLogic.create_basic_matrix import *
 from main.bd_logic import *
 from .models import *
 import random
+import json
 
 
 def index(request):
@@ -49,7 +50,7 @@ def index(request):
             f_password = request.POST["f_password"]
             re_password = request.POST["re_password"]
             if len(Users.objects.filter(nickname=name)) > 0:
-                #по идее лучше просто выводить ошибку что такой пользователь уже существует
+                # по идее лучше просто выводить ошибку что такой пользователь уже существует
                 return redirect(index)
             if f_password != re_password:
                 error = "Неверный пароль"
@@ -66,8 +67,29 @@ def index(request):
                 request.session['email'] = email
 
         elif 'chosenColor' in request.POST:
-            print(2)
+
             request.session['botColor'] = request.POST['chosenColor']
+            if len(Users.objects.filter(nickname='mainBot')) == 0:
+                bot = Users.objects.create(nickname='mainBot', role='bot', rating_elo=250)
+                bot.save()
+            print("size : ", len(GameParticipants.objects.filter(user_id=request.session['id'], game__result="active")))
+            if len(GameParticipants.objects.filter(user_id=request.session['id'], game__result="active")) == 0:
+                bot_data = Users.objects.get(nickname='mainBot')
+                user_data = Users.objects.get(id=request.session['id'])
+                new_game = Games.objects.create(result=GAME_RES.ACTIVE)
+                new_game.save()
+                print(request.POST['chosenColor'])
+                participant1 = GameParticipants.objects.create(game_id=new_game.id, user_id=user_data.id,
+                                                               user_color=request.POST['chosenColor'])
+                participant2 = GameParticipants.objects.create(game_id=new_game.id, user_id=bot_data.id,
+                                                               user_color=request.POST['chosenColor'])
+                if request.POST['chosenColor'] == 'B':
+                    participant2.user_color = "W"
+                else:
+                    participant2.user_color = "B"
+                participant1.save()
+                participant2.save()
+
             return redirect(field)
 
         elif len(request.POST) < 2:
@@ -244,21 +266,138 @@ def field(request):
         current_active_games = GameParticipants.objects.filter(participant_id=1).select_related("user").select_related(
             "game")
         for retard in current_active_games:
-            print(retard.user_id, retard.user.nickname, retard.game_id, retard.participant_id, retard.game.white_player)
+            print(retard.user_id, retard.user.nickname, retard.game_id, retard.participant_id, retard.user_color)
 
     if request.method == "POST" and is_ajax(request=request):
         print(request.POST["type"])
-        # a = request.POST["map"]
-        # mtrx = Matrix(a)
+        print(request.POST)
+        game_data = GameParticipants.objects.get(user_id=request.session['id'], game__result="active")
+
+        print(game_data.game.chessboard_position)
+        print(game_data.game_id)
+        print(game_data.user.nickname)
+        turn_type = "Empty"
+        a = game_data.game.chessboard_position
+        mtrx = Matrix(a)
+        mtrx.current_move = game_data.game.turn
+        print(game_data.game.white_player_chosen_square)
+
+        if request.POST['type'] == 'pressSquare':
+            turn_type = "Selected"
+            print("here")
+            chess_map = ""
+            if game_data.game.turn % 2 == 1:
+                if game_data.game.white_player_chosen_square == "-1":
+                    # choosing given figure and returning possible places to go
+                    mtrx.get_figure_moves(int(request.POST['y']), int(request.POST['x']), "W")
+                    chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
+                    print("moves: ", mtrx.pos_moves)
+                    if len(mtrx.pos_moves) > 0:
+                        game_data.game.white_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
+                        game_data.game.chessboard_position = chess_map
+                        game_data.game.save()
+                    return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
+
+                else:
+                    chosen_y = int(request.POST['y'])
+                    chosen_x = int(request.POST['x'])
+                    prev_chosen_y = int(game_data.game.white_player_chosen_square[0])
+                    prev_chosen_x = int(game_data.game.white_player_chosen_square[1])
+                    if game_data.game.chessboard_position[64 + chosen_y * 8 + chosen_x] == '2':
+                        print("good_move")
+                        turn_type = "Correct"
+                        print(game_data.game.chessboard_position)
+                        mtrx.pieces_on_board[chosen_y][chosen_x] = mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x]
+                        mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x] = EmptyPiece()
+                        chess_map = mtrx.matrix_to_string_conversion()
+                        print(chess_map)
+                        game_data.game.chessboard_position = chess_map
+                        game_data.game.white_player_chosen_square = "-1"
+                        game_data.game.turn += 1
+                        game_data.game.save()
+                    else:
+                        print("retrying")
+                        print(mtrx.pos_moves)
+                        mtrx.pos_moves.clear()
+                        print(mtrx.pos_moves)
+                        print(chosen_y, chosen_x, sep=":y x:")
+                        mtrx.get_figure_moves(chosen_y, chosen_x, "W")
+                        print(mtrx.pos_moves)
+                        chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
+                        game_data.game.chessboard_position = chess_map
+                        if len(mtrx.pos_moves) > 0:
+                            game_data.game.white_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
+                        else:
+                            game_data.game.white_player_chosen_square = -1
+                        game_data.game.save()
+
+                    return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
+                    # выбрать фигуру которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
+
+            else:
+                if game_data.game.black_player_chosen_square == "-1":
+                    mtrx.get_figure_moves(int(request.POST['y']), int(request.POST['x']), "B")
+                    chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
+                    print("moves: ", mtrx.pos_moves)
+                    if len(mtrx.pos_moves) > 0:
+                        game_data.game.black_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
+                        game_data.game.chessboard_position = chess_map
+                        game_data.game.save()
+                    return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
+                else:
+                    chosen_y = int(request.POST['y'])
+                    chosen_x = int(request.POST['x'])
+                    prev_chosen_y = int(game_data.game.black_player_chosen_square[0])
+                    prev_chosen_x = int(game_data.game.black_player_chosen_square[1])
+                    if game_data.game.chessboard_position[64 + chosen_y * 8 + chosen_x] == '2':
+                        turn_type = "Correct"
+                        print(game_data.game.chessboard_position)
+                        mtrx.pieces_on_board[chosen_y][chosen_x] = mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x]
+                        mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x] = EmptyPiece()
+                        chess_map = mtrx.matrix_to_string_conversion()
+                        print(chess_map)
+                        game_data.game.chessboard_position = chess_map
+                        game_data.game.black_player_chosen_square = "-1"
+                        game_data.game.turn += 1
+                        game_data.game.save()
+                    else:
+                        print("retrying")
+                        print(mtrx.pos_moves)
+                        mtrx.pos_moves.clear()
+                        print(mtrx.pos_moves)
+                        print(chosen_y, chosen_x, sep=":y x:")
+                        mtrx.get_figure_moves(chosen_y, chosen_x, "W")
+                        print(mtrx.pos_moves)
+                        chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
+                        game_data.game.chessboard_position = chess_map
+                        if len(mtrx.pos_moves) > 0:
+                            game_data.game.black_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
+                        else:
+                            game_data.game.black_player_chosen_square = -1
+                        game_data.game.save()
+
+                    return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
+                    # выбрать фигуру которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
+
         # mtrx.collect_all_possible_moves(request.session["botColor"])
         # mtrx.make_a_move(mtrx.pick_a_move())
         # a = mtrx.matrix_to_string_conversion()
-        return JsonResponse({"map": "test"})
+        return JsonResponse(json.dumps({"turnType": turn_type,
+                                        "map": "rnbkqbnrpppppppp1111111111r111111111111111111111PPPPPPPPRNBQKBNR1112200000000000000000000000000000000000000000000000000000000000"}),
+                            safe=False)
     else:
-        pos_str = "rnbkqbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
+        cur_game = GameParticipants.objects.filter(user_id=request.session['id'], game__result="active").select_related(
+            "user").select_related(
+            "game")
+
+        pos_str = basic_matrix2D
         player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
         botArtem = {"name": "Bot Artem v0.1", "avatar": "main/img/robot.svg", "rating": '200'}
         botColor = request.session['botColor']
+        for item in cur_game:
+            pos_str = item.game.chessboard_position
+            player1 = {"name": item.user.nickname, "avatar": "main/img/person.svg", "rating": item.user.rating_elo}
+            break
         return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,
                                                    'botColor': botColor})
 

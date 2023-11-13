@@ -133,18 +133,22 @@ class Matrix:
     def pick_a_move(self):
         return random.choice(list(self.pos_moves))
 
+    def get_figure_moves(self, y, x, color):
+        if type(self.pieces_on_board[y][x]) != EmptyPiece and self.pieces_on_board[y][x].color == color:
+            self.pieces_on_board[y][x].find_possible_moves(self)
+            for move in self.pieces_on_board[y][x].pos_moves:
+                if move == "0-0" or move == "0-0-0":
+                    self.pos_moves.add(move)
+                else:
+                    self.pos_moves.add(str(self.alpha[x]) + str(y + 1) + "->" + move)
+
     def collect_all_possible_moves(self, color="W"):
         # Function calls methods for every piece of given color and collects all possible moves
         self.pos_moves.clear()
         for y in range(self.size):
             for x in range(self.size):
-                if type(self.pieces_on_board[y][x]) != EmptyPiece and self.pieces_on_board[y][x].color == color:
-                    self.pieces_on_board[y][x].find_possible_moves(self)
-                    for move in self.pieces_on_board[y][x].pos_moves:
-                        if move == "0-0" or move == "0-0-0":
-                            self.pos_moves.add(move)
-                        else:
-                            self.pos_moves.add(str(self.alpha[x]) + str(y + 1) + "->" + move)
+                self.get_figure_moves(y, x, color)
+
         return self.pos_moves
 
     def make_a_move(self, move_str):
@@ -160,7 +164,7 @@ class Matrix:
                 rook_x = 0
                 rook_dif = 3
                 king_dif = -2
-            print(y,x)
+            print(y, x)
             self.pieces_on_board[y][x + king_dif] = self.pieces_on_board[y][x]
             self.pieces_on_board[y][x] = EmptyPiece()
             self.pieces_on_board[y][rook_x + rook_dif] = self.pieces_on_board[y][rook_x]
@@ -175,15 +179,39 @@ class Matrix:
             self.pieces_on_board[y1 - 1][x1 - 1] = EmptyPiece()
         self.current_move += 1
 
-    def matrix_to_string_conversion(self):
+    def matrix_to_string_conversion(self, include_pos_moves=False):
         result = ""
         for y in range(self.size):
             for x in range(self.size):
                 color = self.pieces_on_board[y][x].color
                 result += self.stringified_pieces[type(self.pieces_on_board[y][x])][color]
-        return result + "0" * 64
+        if not include_pos_moves:
+            return result + "0" * 64
+        else:
+            arr = []
+            for i in range(64):
+                arr.append("0")
+            y = 0
+            x = 0
+            for move in self.pos_moves:
+                if move == "0-0":
+                    if self.current_move % 2 == 1:
+                        y = 7
+                    x = 6
+                elif move == "0-0-0":
+                    if self.current_move % 2 == 1:
+                        y = 7
+                    x = 2
+                else:
+                    y = int(move[-1])-1
+                    x = self.alpha_to_num[move[-2]]-1
+                arr[8 * y + x] = '2'
 
+            for c in arr:
+                # print(c, end="")
+                result += c
 
+            return result
 # mtrx = Matrix(basic_matrix2D)
 # print(mtrx.matrix_to_string_conversion())
 # print(type(mtrx.pieces_on_board_dict["0 0"]))
