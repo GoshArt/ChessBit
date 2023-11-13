@@ -49,7 +49,7 @@ def index(request):
             f_password = request.POST["f_password"]
             re_password = request.POST["re_password"]
             if len(Users.objects.filter(nickname=name)) > 0:
-                # по идее лучше просто выводить ошибку что такой пользователь уже существует
+                #по идее лучше просто выводить ошибку что такой пользователь уже существует
                 return redirect(index)
             if f_password != re_password:
                 error = "Неверный пароль"
@@ -142,17 +142,33 @@ def profile(request):
             print("Result:", games_data.game.result)
             print("Finished", games_data.game.finished)
             print("MainUserNickName", name + " VS " + enemy_guy)
-
         versus = name + "VS" + enemy_guy
+
+        if id == games_data.game.white_player:
+            side = 1
+        else:
+            side = -1
+        if (games_data.game.result == 1 and side == 1) or (games_data.game.result == -1 and side == -1):
+            fr = ' 1'
+            sr = ' 0'
+        else:
+            fr = ' 0'
+            sr = ' 1'
 
         for i in range(min(10, len(collected_games_data))):
             games_data = collected_games_data[i]
-            game = {"name": versus,
+            game = {"name": name,
+                    "enemy": enemy_guy,
                     "avatar": "main/img/person.svg",
                     "res": games_data.game.result,
                     "date": "23.02.2022",
                     "game_id": games_data.game_id,
+                    "side": side,
+                    "fr": fr,
+                    "sr": sr,
                     }
+            # print(games_data.game.result)
+            # print(side)
             games.append(game)
         # id = request.GET.get("id")
         # name = request.session["name"]
@@ -161,7 +177,7 @@ def profile(request):
         # email = request.session["email"]
 
         # rating = random.randint(500, 1200)
-        print(games)
+
         return render(request, 'main/profile.html',
                       {"games": games, "id": id, "rating": rating, "name": name,
                        "url_avatar": url_avatar,
@@ -184,7 +200,6 @@ def profile(request):
             request.session["name"] = ""
             request.session["id"] = ""
             request.session['auth'] = False
-            print("retard")
             return redirect(index)
         print(request.POST)
 
@@ -232,17 +247,25 @@ def field(request):
             print(retard.user_id, retard.user.nickname, retard.game_id, retard.participant_id, retard.game.white_player)
 
     if request.method == "POST" and is_ajax(request=request):
-        a = request.POST["map"]
-        mtrx = Matrix(a)
-        mtrx.collect_all_possible_moves(request.session["botColor"])
-        mtrx.make_a_move(mtrx.pick_a_move())
-        a = mtrx.matrix_to_string_conversion()
-        return JsonResponse({"map": a})
+        print(request.POST["type"])
+        # a = request.POST["map"]
+        # mtrx = Matrix(a)
+        # mtrx.collect_all_possible_moves(request.session["botColor"])
+        # mtrx.make_a_move(mtrx.pick_a_move())
+        # a = mtrx.matrix_to_string_conversion()
+        return JsonResponse({"map": "test"})
     else:
-        pos_str = "111qkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
+        pos_str = "rnbkqbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"
         player1 = {"name": name, "avatar": "main/img/person.svg", "rating": random.randint(200, 1600)}
-
         botArtem = {"name": "Bot Artem v0.1", "avatar": "main/img/robot.svg", "rating": '200'}
         botColor = request.session['botColor']
-        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'line': pos_str,
+        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,
                                                    'botColor': botColor})
+
+
+def rules(request):
+    name = ""
+    if "auth" in request.session:
+        if request.session["auth"]:
+            name = request.session["name"]
+    return render(request, 'main/rules.html', {'name': name, "url_avatar": "main/img/person.svg"})

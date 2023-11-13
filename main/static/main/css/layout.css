@@ -2,6 +2,9 @@ body{
     background: #F1EADA;
 
 }
+a{
+    text-decoration: none;
+}
 .img-avatar-mini {
     width: calc(1.4rem + 3vw);
     height: calc(1.4rem + 3vw);

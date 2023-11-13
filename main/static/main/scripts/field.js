@@ -28,7 +28,14 @@ function start() {
             changeMap,
         );
     }
-    buttonSurrender();
+    viewModalGaveUp();
+    let resultModal = new bootstrap.Modal(document.getElementById('resultModal'))
+    let admit_defeat_button = document.getElementById('admit-defeat-button');
+    admit_defeat_button.addEventListener('click', () => {
+        result_str.innerHTML = `К сожалению вы сдались и ваш король пал. \n Вы проиграли!\nПопробуйте заново и попытайтесь победить!`;
+        resultModal.show();
+        buttonSurrender();
+    });
 } //первичный запуск
 function pressSquare() {
     dsq = document.querySelectorAll("div.square");
@@ -230,10 +237,4 @@ function pawnChangeRequest(data) {
     //тут должна быть функция
 } //дописать
 function viewModalGaveUp() {
-    let resultModal = new bootstrap.Modal(document.getElementById('resultModal'))
-    let admit_defeat_button = document.getElementById('admit-defeat-button');
-    admit_defeat_button.addEventListener('click', () => {
-        result_str.innerHTML = `К сожалению вы сдались и ваш король пал. \n Вы проиграли!\nПопробуйте заново и попытайтесь победить!`;
-        resultModal.show()
-    });
-} //отображение модалки сдачи
+}
