@@ -279,6 +279,8 @@ def is_ajax(request):
 
 @csrf_exempt
 def field(request):
+    if "type" in request.POST:
+        print(request.POST)
     if "auth" not in request.session:
         return redirect(index)
     if not request.session["auth"]:
@@ -328,7 +330,6 @@ def field(request):
                     # choosing given figure and returning possible places to go
                     mtrx.get_figure_moves(int(request.POST['y']), int(request.POST['x']), "W")
                     chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
-                    print("moves: ", mtrx.pos_moves)
                     if len(mtrx.pos_moves) > 0:
                         game_data.game.white_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
                         game_data.game.chessboard_position = chess_map
@@ -341,25 +342,17 @@ def field(request):
                     prev_chosen_y = int(game_data.game.white_player_chosen_square[0])
                     prev_chosen_x = int(game_data.game.white_player_chosen_square[1])
                     if game_data.game.chessboard_position[64 + chosen_y * 8 + chosen_x] == '2':
-                        print("good_move")
                         turn_type = "Correct"
-                        print(game_data.game.chessboard_position)
                         mtrx.pieces_on_board[chosen_y][chosen_x] = mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x]
                         mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x] = EmptyPiece()
                         chess_map = mtrx.matrix_to_string_conversion()
-                        print(chess_map)
                         game_data.game.chessboard_position = chess_map
                         game_data.game.white_player_chosen_square = "-1"
                         game_data.game.turn += 1
                         game_data.game.save()
                     else:
-                        print("retrying")
-                        print(mtrx.pos_moves)
                         mtrx.pos_moves.clear()
-                        print(mtrx.pos_moves)
-                        print(chosen_y, chosen_x, sep=":y x:")
                         mtrx.get_figure_moves(chosen_y, chosen_x, "W")
-                        print(mtrx.pos_moves)
                         chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
                         game_data.game.chessboard_position = chess_map
                         if len(mtrx.pos_moves) > 0:
@@ -375,7 +368,7 @@ def field(request):
                 if game_data.game.black_player_chosen_square == "-1":
                     mtrx.get_figure_moves(int(request.POST['y']), int(request.POST['x']), "B")
                     chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
-                    print("moves: ", mtrx.pos_moves)
+
                     if len(mtrx.pos_moves) > 0:
                         game_data.game.black_player_chosen_square = str(request.POST['y']) + str(request.POST['x'])
                         game_data.game.chessboard_position = chess_map
@@ -388,18 +381,18 @@ def field(request):
                     prev_chosen_x = int(game_data.game.black_player_chosen_square[1])
                     if game_data.game.chessboard_position[64 + chosen_y * 8 + chosen_x] == '2':
                         turn_type = "Correct"
-                        print(game_data.game.chessboard_position)
+
                         mtrx.pieces_on_board[chosen_y][chosen_x] = mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x]
                         mtrx.pieces_on_board[prev_chosen_y][prev_chosen_x] = EmptyPiece()
                         chess_map = mtrx.matrix_to_string_conversion()
-                        print(chess_map)
+
                         game_data.game.chessboard_position = chess_map
                         game_data.game.black_player_chosen_square = "-1"
                         game_data.game.turn += 1
                         game_data.game.save()
                     else:
                         mtrx.pos_moves.clear()
-                        mtrx.get_figure_moves(chosen_y, chosen_x, "W")
+                        mtrx.get_figure_moves(chosen_y, chosen_x, "B")
                         chess_map = mtrx.matrix_to_string_conversion(include_pos_moves=True)
                         game_data.game.chessboard_position = chess_map
                         if len(mtrx.pos_moves) > 0:
