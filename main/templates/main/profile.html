@@ -73,12 +73,12 @@
                     </p>
                     <p class="card-text"><small class="text-muted">{{ game.date }}</small></p>
                 </div>
-                {% if game.res == 1 %}
+                {% if game.fr == " 1" %}
                     <div class="result col-2 d-flex align-items-center justify-content-center"
                          style="background-color: #81B64C">
                         <p>+</p>
                     </div>
-                {% elif game.res == -1 %}
+                {% elif game.fr == ' 0' %}
                     <div class="result col-2 d-flex align-items-center justify-content-center"
                          style="background-color: #CF4846">
                         <p>-</p>
