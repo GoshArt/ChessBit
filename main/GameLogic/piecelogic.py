@@ -32,9 +32,11 @@ class EmptyPiece:
             return -1
         if type(matrix.pieces_on_board[y][x]) == EmptyPiece:
             self.pos_moves.add(self.alpha[x] + str(y + 1))
+            print("y: ", y, " x: ", x)
             return 1
         if matrix.pieces_on_board[y][x].color != matrix.pieces_on_board[self.y][self.x].color:
             self.pos_moves.add(self.alpha[x] + str(y + 1))
+            print("y: ", y, " x: ", x)
         return 0
 
     def linear_continuity_pawn_sub_check(self, matrix, y, x):
@@ -71,11 +73,15 @@ class EmptyPiece:
 
     def horizontal_check(self, matrix):
         # Function generates all horizontal coordinates moving away from the piece and checks them
-        for x in range(self.x + 1, len(matrix.matrix[0])):
+        print("here1")
+        for x in range(self.x + 1, matrix.size):
+            print("here2")
             res = self.linear_continuity_sub_check(matrix, self.y, x)
             if res == 0:
                 break
+
         for x in range(self.x - 1, -1, -1):
+            print("here3")
             res = self.linear_continuity_sub_check(matrix, self.y, x)
             if res == 0:
                 break
