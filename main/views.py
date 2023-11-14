@@ -104,7 +104,7 @@ def index(request):
     # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
                   {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players,
-                   "loginError": "Ошибка входа", "registerError": "Ошибка регистрации"})
+                   "loginError": "", "registerError": ""})
 
 
 def waiting(request):
