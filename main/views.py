@@ -397,13 +397,10 @@ def field(request):
                         game_data.game.save()
 
                     return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
-                    # выбрать фигуру которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
-
-        # mtrx.collect_all_possible_moves(request.session["botColor"])
-        # mtrx.make_a_move(mtrx.pick_a_move())
-        # a = mtrx.matrix_to_string_conversion()
-        return JsonResponse(json.dumps({"turnType": turn_type,
-                                        "map": "rnbkqbnrpppppppp1111111111r111111111111111111111PPPPPPPPRNBQKBNR1112200000000000000000000000000000000000000000000000000000000000"}),
+                    # выбрать фигуру, которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
+        if request.POST['type'] == 'goMoveBot':
+            return JsonResponse(json.dumps({"turnType": 'botMove',
+                                        "map": "rnbqkbnrpppppppp111111111111111111111111111111P1PPPPPP1PRNBQKBNR0000000000000000000000000000000000000000000000000000000000000000"}),
                             safe=False)
     else:
         cur_game = GameParticipants.objects.filter(user_id=request.session['id'], game__result="active").select_related(
@@ -418,7 +415,10 @@ def field(request):
             pos_str = item.game.chessboard_position
             player1 = {"name": item.user.nickname, "avatar": "main/img/person.svg", "rating": item.user.rating_elo}
             break
-        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,'botColor': botColor, 'enemyType': "bot"})
+
+        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,
+                                                   'botColor': botColor, 'enemyType': "Bot", "currentTurnIndex" : 1}) #currentTurnIndex изменить единичку на чётность хода в бд
+
 
 
 def rules(request):
