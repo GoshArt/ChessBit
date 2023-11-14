@@ -52,9 +52,6 @@
         </div>
     </div>
 
-
-
-
     <div class="history row gap-3 col-xl-7 col-md-7 col-sm-12 mx-auto  " style="margin-top: 4rem">
         <div class="col-11 col-sm-12 col-md-12 col-lg-8 mx-auto">
 
@@ -66,7 +63,6 @@
                     <h6 class="col-3 text-end">Дата</h6>
                     <hr style="margin-bottom: 4px">
                 </div>
-
                 {% for game in games %}
                     <div class="row justify-content-between" style="margin-left: 0">
                         <div class="row col-7 text-start d-flex" style="align-items: baseline">
@@ -84,12 +80,12 @@
                             </div>
                         </div>
                         <h5 class="col-2 p-0 m-0 text-center d-flex align-items-center justify-content-center">
-                            {% if game.res == '1' %}
+                            {% if game.fr == 1 %}
                                 <div class="result col-2 d-flex align-items-center justify-content-center"
                                      style="background-color: #81B64C">
                                     <p class="d-flex align-items-center justify-content-center">+</p>
                                 </div>
-                            {% elif game.res == '-1' %}
+                            {% elif game.fr == -1 %}
                                 <div class="result col-2 d-flex align-items-center justify-content-center"
                                      style="background-color: #CF4846">
                                     <p class="d-flex align-items-center justify-content-center">-</p>

@@ -21,7 +21,7 @@ $(window).resize(function () {
 function start() {
     map = document.getElementById("startMap").value.split('');
     color = "white"
-    if (botColor === "W"){
+    if (botColor === "W") {
         color = "black"
     }
 
@@ -83,18 +83,18 @@ function clearMoveMap() {
 } //очистка поля от ходов
 function addSquares() {
     $('.board').html('');
-    if (color === "black"){
+    if (color === "black") {
         for (let coord = 63; coord >= 0; coord--)
-        $('.board').append(divSquare
-            .replace('$coord', coord)
-            .replace('$color',
-                isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
-    }else {
+            $('.board').append(divSquare
+                .replace('$coord', coord)
+                .replace('$color',
+                    isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
+    } else {
         for (let coord = 0; coord < 64; coord++)
-        $('.board').append(divSquare
-            .replace('$coord', coord)
-            .replace('$color',
-                isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
+            $('.board').append(divSquare
+                .replace('$coord', coord)
+                .replace('$color',
+                    isBlackSquareAt(coord) ? 'sq_b' : 'sq_w'))
     }
 
 } //добавление ячеек поля
@@ -142,8 +142,8 @@ function getChessSymbol(figure) {
 function isBlackSquareAt(coord) {
     return (coord % 8 + Math.floor(coord / 8)) % 2;
 } //создание поля
-function whichKingLoss(data) {
-    const response = JSON.parse(data);
+function whichKingLost(data) {
+    response = data
     let resultModal = new bootstrap.Modal(document.getElementById('resultModal'),)
     if (response.res === "Win") { //победа
         result_str.innerHTML = `Поздравляем, вы победили! Вражеский король повержен. Сыграйте снова и закрепите свой успех.`;
@@ -217,23 +217,28 @@ function changeMap(data) {
     console.log(response)
     console.log(response.turnType === "Selected")
     console.log(map)
+    if (response.turnType === "gameFinished") {
+        showFigures(map.join(''))
+        clearMoveMap();
+        whichKingLost(response)
+    }
     if (response.turnType === "Selected" || response.turnType === "NoSelected") {
         viewMoveFigure(map)
     } else if (response.turnType === "Correct" || response.turnType === "InСorrect") {
         showFigures(map.join(''))
         clearMoveMap();
     }
-    if (response.turnType === "Correct" ) {
-        currentTurnIndex = (+currentTurnIndex+1) % 2
+    if (response.turnType === "Correct") {
+        currentTurnIndex = (+currentTurnIndex + 1) % 2
     }
-    if(currentTurnIndex){
+    if (currentTurnIndex) {
         document.getElementById("turnVisual").innerHTML = "Сейчас ход белых";
-    }else {
+    } else {
         document.getElementById("turnVisual").innerHTML = "Сейчас ход чёрных";
     }
-    if(response.turnType === "botMove"){
+    if (response.turnType === "botMove") {
         showFigures(map.join(''))
-        currentTurnIndex = (+currentTurnIndex+1) % 2
+        currentTurnIndex = (+currentTurnIndex + 1) % 2
         console.log(botColorFun())
     }
     if (enemyType === "Bot" && botColorFun()) {
@@ -267,11 +272,13 @@ function sendPawnChange(figure) {
         changeMap,
     );
 }
+
 function pawnChangeRequest(data) {
     //тут должна быть функция
 } //дописать
 function viewModalGaveUp() {
 }
+
 function botColorFun() {//currentTurnIndex 1 - белый
     return (currentTurnIndex === 1 && botColor === "W") || (currentTurnIndex === 0 && botColor === "B");
 }

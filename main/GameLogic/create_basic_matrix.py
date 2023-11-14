@@ -39,10 +39,12 @@ castle_check_matrix = [
 
 class Matrix:
 
-    def __init__(self, matrix=None):
+    def __init__(self, matrix=None, moves_without_taking=0):
+
         if matrix is None:
             matrix = basic_matrix
 
+        self.moves_without_taking = moves_without_taking
         self.size = 8
         self.matrix = matrix
         self.current_move = 1
@@ -152,7 +154,7 @@ class Matrix:
         return self.pos_moves
 
     def make_a_move(self, move_str):
-        print(move_str)
+
 
         if move_str == "0-0" or move_str == "0-0-0":
             y = 7  # king's row
@@ -177,7 +179,7 @@ class Matrix:
             y1 = int(move_str[1])
             x2 = self.alpha_to_num[move_str[4]]
             y2 = int(move_str[5])
-            print(x1, y1, x2, y2)
+
             self.pieces_on_board[y2 - 1][x2 - 1] = self.pieces_on_board[y1 - 1][x1 - 1]
             self.pieces_on_board[y1 - 1][x1 - 1] = EmptyPiece()
         self.current_move += 1
@@ -215,6 +217,20 @@ class Matrix:
                 result += c
 
             return result
+
+    def is_victory(self):
+        kings_here = {"B": 0, "W": 0}
+        for row in self.pieces_on_board:
+            for piece in row:
+                if type(piece) == King:
+                    kings_here[piece.color] = 1
+        if kings_here["B"] == 0:
+            return 1
+        elif kings_here["W"] == 0:
+            return -1
+        elif self.moves_without_taking >= 50:
+            return 0
+        return 2
 # mtrx = Matrix(basic_matrix2D)
 # print(mtrx.matrix_to_string_conversion())
 # print(type(mtrx.pieces_on_board_dict["0 0"]))
