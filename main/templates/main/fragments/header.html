@@ -6,10 +6,10 @@
                 <img src="{% static url_avatar %}" class="img-avatar-mini img-thumbnail img-fluid " alt="">
             </div>
             <div class="col" >
-                {% if auth == True %}
+                {% if name != "Гость" %}
                     <a href="/profile" class="h2">{{ name }}</a>
                 {% else %}
-                    <a data-bs-toggle="modal" data-bs-target="#warningModal" class="name-avatar-mini" type="button" >Гость</a>
+                    <a data-bs-toggle="modal" data-bs-target="#warningModal" class="name-avatar-mini" type="button">{{ name }}</a>
                 {% endif %}
             </div>
         </div>
