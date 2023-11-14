@@ -13,7 +13,7 @@ import json
 
 def index(request):
     auth = False
-    name = ""
+    name = "Гость"
     url_avatar = 'main/img/person.svg'
     error = ""
 
@@ -441,7 +441,7 @@ def field(request):
 
 
 def rules(request):
-    name = ""
+    name = "Гость"
     if "auth" in request.session:
         if request.session["auth"]:
             name = request.session["name"]
