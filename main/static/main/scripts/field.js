@@ -27,6 +27,7 @@ function start() {
 
     addSquares();
     showFigures(map.join(""));
+    console.log(color)
     if (color === "black") {
         $.post(
             "/field",
