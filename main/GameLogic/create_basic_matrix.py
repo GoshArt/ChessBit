@@ -152,7 +152,9 @@ class Matrix:
         return self.pos_moves
 
     def make_a_move(self, move_str):
-        if move_str == "0-0" or "0-0-0":
+        print(move_str)
+
+        if move_str == "0-0" or move_str == "0-0-0":
             y = 7  # king's row
             x = 4  # king's column
             king_dif = 2
@@ -164,7 +166,7 @@ class Matrix:
                 rook_x = 0
                 rook_dif = 3
                 king_dif = -2
-            print(y, x)
+
             self.pieces_on_board[y][x + king_dif] = self.pieces_on_board[y][x]
             self.pieces_on_board[y][x] = EmptyPiece()
             self.pieces_on_board[y][rook_x + rook_dif] = self.pieces_on_board[y][rook_x]
@@ -175,6 +177,7 @@ class Matrix:
             y1 = int(move_str[1])
             x2 = self.alpha_to_num[move_str[4]]
             y2 = int(move_str[5])
+            print(x1, y1, x2, y2)
             self.pieces_on_board[y2 - 1][x2 - 1] = self.pieces_on_board[y1 - 1][x1 - 1]
             self.pieces_on_board[y1 - 1][x1 - 1] = EmptyPiece()
         self.current_move += 1
@@ -203,8 +206,8 @@ class Matrix:
                         y = 7
                     x = 2
                 else:
-                    y = int(move[-1])-1
-                    x = self.alpha_to_num[move[-2]]-1
+                    y = int(move[-1]) - 1
+                    x = self.alpha_to_num[move[-2]] - 1
                 arr[8 * y + x] = '2'
 
             for c in arr:

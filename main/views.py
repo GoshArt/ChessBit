@@ -398,7 +398,10 @@ def field(request):
                     return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
                     # выбрать фигуру, которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
         if request.POST['type'] == 'goMoveBot':
-            mtrx.collect_all_possible_moves()
+            if game_data.game.turn % 2 == 1:
+                mtrx.collect_all_possible_moves('W')
+            else:
+                mtrx.collect_all_possible_moves('B')
             print(mtrx.pos_moves)
             move = mtrx.pick_a_move()
             print(move)
