@@ -13,17 +13,6 @@ import json
 
 def index(request):
     auth = False
-    # pos = Users.objects.get(nickname="noksyte2")
-    # print(1)
-    # Users.objects.create(nickname="ass", password="anal")
-    # print(2)
-    # pos.ratingelo = 1200
-    # pos.save()
-    # print(3)
-    # v = Users.objects.get(nickname="ass")
-    # v.delete()
-    # print(4)
-
     name = ""
     url_avatar = 'main/img/person.svg'
     error = ""
@@ -115,7 +104,7 @@ def index(request):
     # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
                   {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players,
-                   "loginError": "", "registerError": ""})
+                   "loginError": "Ошибка входа", "registerError": "Ошибка регистрации"})
 
 
 def waiting(request):
@@ -157,11 +146,6 @@ def profile(request):
         for games_data in collected_games_data:
             game_id = games_data.game_id
             enemy_guy = GameParticipants.objects.get(Q(game_id=game_id) & ~Q(user_id=id))
-            # guys_data = Users.objects.filter(Q(id=games_data.game.white_player) | Q(id=games_data.game.black_player))
-            #
-            # for i in range(2):
-            #     if guys_data[i].nickname != name:
-            #         enemy_guy = guys_data[i].nickname
             print("Result:", games_data.game.result)
             print("MainUserNickName", name + " VS " + enemy_guy.user.nickname)
             versus = name + "VS" + enemy_guy.user.nickname
@@ -201,40 +185,6 @@ def profile(request):
                     "sr": right_result,
                 }
             )
-        # if id == games_data.game.white_player:
-        #     side = 1
-        # else:
-        #     side = -1
-        # if (games_data.game.result == 1 and side == 1) or (games_data.game.result == -1 and side == -1):
-        #     fr = 1
-        #     sr = 0
-        # else:
-        #     fr = 0
-        #     sr = 1
-
-        # for i in range(min(10, len(collected_games_data))):
-        #     games_data = collected_games_data[i]
-        #     game = {"name": name,
-        #             "enemy": enemy_guy,
-        #             "avatar": "main/img/person.svg",
-        #             "res": games_data.game.result,
-        #             "date": "23.02.2022",
-        #             "game_id": games_data.game_id,
-        #             "side": side,
-        #             "fr": fr,
-        #             "sr": sr,
-        #             }
-        #     # print(games_data.game.result)
-        #     # print(side)
-        #     games.append(game)
-        # id = request.GET.get("id")
-        # name = request.session["name"]
-        # if "email" not in request.session:
-        #     request.session["email"] = Users.objects.get(nickname=name).email
-        # email = request.session["email"]
-
-        # rating = random.randint(500, 1200)
-
         return render(request, 'main/profile.html',
                       {"games": games, "id": id, "rating": rating, "name": name,
                        "url_avatar": url_avatar,
