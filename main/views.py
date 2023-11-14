@@ -418,8 +418,7 @@ def field(request):
             pos_str = item.game.chessboard_position
             player1 = {"name": item.user.nickname, "avatar": "main/img/person.svg", "rating": item.user.rating_elo}
             break
-        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,
-                                                   'botColor': botColor})
+        return render(request, 'main/field.html', {'player1': player1, 'player2': botArtem, 'startMap': pos_str,'botColor': botColor, 'enemyType': "bot"})
 
 
 def rules(request):
