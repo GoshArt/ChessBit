@@ -34,7 +34,7 @@ def index(request):
             username = request.POST["username"]
             username = escape(username)
             password = request.POST["password"]
-            password = escape(username)
+            password = escape(password)
             user = Users.objects.filter(nickname=username, password=password).first()
             if user:
                 request.session['auth'] = True
@@ -63,8 +63,10 @@ def index(request):
                 register_error = "Слишком длинный пароль"
             elif len(Users.objects.filter(nickname=name)) > 0:
                 register_error = "Такой пользователь уже существует"
+            elif len(Users.objects.filter(email=email)) > 0:
+                register_error = "Данный email уже занят"
             elif f_password != re_password:
-                register_error = "Пароли не сходятся"
+                register_error = "Пароли не сходятся, как и мои ряды"
             print(register_error)
             if register_error != "":
                 return render(request, 'main/index.html',
