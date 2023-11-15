@@ -231,11 +231,6 @@ function changeMap(data) {
     if (response.turnType === "Correct") {
         currentTurnIndex = (+currentTurnIndex + 1) % 2
     }
-    if (currentTurnIndex) {
-        document.getElementById("turnVisual").innerHTML = "Сейчас ход белых";
-    } else {
-        document.getElementById("turnVisual").innerHTML = "Сейчас ход чёрных";
-    }
     if (response.turnType === "botMove") {
         showFigures(map.join(''))
         currentTurnIndex = (+currentTurnIndex + 1) % 2
@@ -249,6 +244,11 @@ function changeMap(data) {
             },
             changeMap,
         );
+    }
+    if (currentTurnIndex) {
+        document.getElementById("turnVisual").innerHTML = "Сейчас ход белых";
+    } else {
+        document.getElementById("turnVisual").innerHTML = "Сейчас ход чёрных";
     }
 
 
