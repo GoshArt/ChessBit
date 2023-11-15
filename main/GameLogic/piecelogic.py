@@ -134,13 +134,16 @@ class EmptyPiece:
         pass
 
     def castle(self, matrix):
-        if type(self) == King and not self.moved:
-            left_figure = self.first_piece_to_the_left(matrix)
-            right_figure = self.first_piece_to_the_right(matrix)
-            if type(left_figure) == Rook and not left_figure.moved:
-                self.pos_moves.add("0-0")
-            if type(right_figure) == Rook and not right_figure.moved:
-                self.pos_moves.add("0-0-0")
+        pass
+        # a lot of problems not here but in moves castling causes, still a lot of work to be done
+
+        # if type(self) == King and not self.moved:
+        #     left_figure = self.first_piece_to_the_left(matrix)
+        #     right_figure = self.first_piece_to_the_right(matrix)
+        #     if type(left_figure) == Rook and not left_figure.moved:
+        #         self.pos_moves.add("0-0")
+        #     if type(right_figure) == Rook and not right_figure.moved:
+        #         self.pos_moves.add("0-0-0")
 
 
 class Pawn(EmptyPiece):
