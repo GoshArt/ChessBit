@@ -268,8 +268,24 @@ def field(request):
         mtrx = Matrix(a)
         mtrx.current_move = game_data.game.turn
         print(game_data.game.white_player_chosen_square)
+        if request.POST['type'] == 'gaveUp':
+            game_finished = -1
+            if game_data.game.turn % 2 == 0:
+                game_finished = 1
 
-        if request.POST['type'] == 'pressSquare':
+            game_players = GameParticipants.objects.filter(game_id=game_data.game_id).select_related('user')
+            for player in game_players:
+                if player.user.id == request.session['id']:
+                    player.user.rating_elo -= 20
+                else:
+                    player.user.rating_elo += 20
+                player.user.save()
+            game_data.game.result = game_finished
+            game_data.game.save()
+            chess_map = mtrx.matrix_to_string_conversion()
+            return JsonResponse(json.dumps({"turnType": 'gameFinished', "map": chess_map, "res": "Lose"}), safe=False)
+
+        elif request.POST['type'] == 'pressSquare':
             turn_type = "Selected"
             print("here")
             chess_map = ""
@@ -386,7 +402,7 @@ def field(request):
 
                     return JsonResponse(json.dumps({"turnType": turn_type, "map": chess_map}), safe=False)
                     # выбрать фигуру, которая была нажата до этого, и если нажатая координата находится в сете доступных ходов, сходить, сбросить выделение
-        if request.POST['type'] == 'goMoveBot':
+        elif request.POST['type'] == 'goMoveBot':
             if game_data.game.turn % 2 == 1:
                 mtrx.collect_all_possible_moves('W')
             else:
@@ -417,6 +433,8 @@ def field(request):
                 return JsonResponse(json.dumps({"turnType": 'gameFinished', "map": map, "res": "Lose"}), safe=False)
 
             return JsonResponse(json.dumps({"turnType": 'botMove', "map": map}), safe=False)
+        else:
+            print("какого черта это сюда попало")
     else:
         cur_game = GameParticipants.objects.filter(user_id=request.session['id'], game__result="active").select_related(
             "user").select_related(
