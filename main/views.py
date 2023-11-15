@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_exempt
 from main.GameLogic.create_basic_matrix import *
 from main.bd_logic import *
 from .models import *
-from django.utils.html import escape
 import random
 import json
 
@@ -18,59 +17,31 @@ def index(request):
     url_avatar = 'main/img/person.svg'
     error = ""
 
-    best_players = []
-    best_players_db = Users.objects.order_by('rating_elo').reverse().all()
-    p = 1
-    for player in best_players_db:
-        best_players.append({"name": player.nickname, "res": player.rating_elo})
-        if p == 10:
-            break
-        p += 1
     if request.method == "GET":
         pass
     elif request.method == "POST":
         if "username" in request.POST:
-
             username = request.POST["username"]
-            username = escape(username)
             password = request.POST["password"]
-            password = escape(username)
-            user = Users.objects.filter(nickname=username, password=password).first()
+
+            user = Users.objects.get(nickname=username, password=password)
             if user:
                 request.session['auth'] = True
                 request.session['name'] = username
                 request.session['password'] = password
                 request.session['id'] = user.id
             else:
-                return render(request, 'main/index.html',
-                              {"name": "Гость", "url_avatar": url_avatar, "auth": False, "error": error,
-                               "best_players": best_players, "loginError": "Данные введены неверно",
-                               "register_error": ""})
-
+                error = "Данные введены неверно"
         elif "re_password" in request.POST:
-            name = escape(request.POST["name"])
-            email = escape(request.POST["email"])
-            f_password = escape(request.POST["f_password"])
-            re_password = escape(request.POST["re_password"])
-            register_error = ""
-            if len(name) < 3:
-                register_error = "Слишком короткое имя пользователя"
-            elif len(name) > 20:
-                register_error = "Слишком длинное имя пользователя"
-            elif len(f_password) < 3:
-                register_error = "Слишком короткий пароль"
-            elif len(f_password) > 20:
-                register_error = "Слишком длинный пароль"
-            # elif len(Users.objects.filter(nickname=name)) > 0:
-            #     register_error = "Такой пользователь уже существует"
-            elif f_password != re_password:
-                register_error = "Пароли не сходятся"
-            print(register_error)
-            if register_error != "":
-                return render(request, 'main/index.html',
-                              {"name": "Гость", "url_avatar": url_avatar, "auth": False, "error": error,
-                               "best_players": best_players, "loginError": "",
-                               "registerError": register_error})
+            name = request.POST["name"]
+            email = request.POST["email"]
+            f_password = request.POST["f_password"]
+            re_password = request.POST["re_password"]
+            if len(Users.objects.filter(nickname=name)) > 0:
+                # по идее лучше просто выводить ошибку что такой пользователь уже существует
+                return redirect(index)
+            if f_password != re_password:
+                error = "Неверный пароль"
             else:
                 new_user = Users()
                 new_user.nickname = name
@@ -117,16 +88,23 @@ def index(request):
             request.session['id'] = ""
             print("done")
 
-    print(name)
     if "auth" in request.session:
-        if request.session["auth"] == True:
+        if request.session["auth"]:
             auth = True
             name = request.session["name"]
-    print(name)
+
+    best_players = []
+    best_players_db = Users.objects.order_by('rating_elo').reverse().all()
+    p = 1
+    for player in best_players_db:
+        best_players.append({"name": player.nickname, "res": player.rating_elo})
+        if p == 10:
+            break
+        p += 1
     # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
                   {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players,
-                   "loginError": "", "register_error": ""})
+                   "loginError": "", "registerError": ""})
 
 
 def waiting(request):
