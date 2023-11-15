@@ -219,7 +219,7 @@ def profile(request):
         if "username" in request.POST:
             print(1)
             pos = Users.objects.get(nickname=request.session["name"])
-            name = request.POST['username']
+            name = escape(request.POST['username'])
             renaming_error = ""
             if len(name) < 3:
                 renaming_error = "Слишком короткое имя пользователя"
