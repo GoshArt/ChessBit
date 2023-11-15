@@ -217,10 +217,22 @@ def profile(request):
         if "username" in request.POST:
             print(1)
             pos = Users.objects.get(nickname=request.session["name"])
-            pos.nickname = request.POST["username"]
-            pos.save()
-            request.session["name"] = request.POST["username"]
+            name = request.POST['username']
+            renaming_error = ""
+            if len(name) < 3:
+                renaming_error = "Слишком короткое имя пользователя"
+            elif len(name) > 20:
+                renaming_error = "Слишком длинное имя пользователя"
+            elif len(Users.objects.filter(nickname=name)) > 0:
+                renaming_error = "Такой пользователь уже существует"
+            if renaming_error == "":
+                pos.nickname = request.POST["username"]
+                pos.save()
+                request.session["name"] = request.POST["username"]
+
             return redirect(profile)
+
+
 
         if "deletion" in request.POST:
             print(1)
