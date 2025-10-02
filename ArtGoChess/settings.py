@@ -80,14 +80,25 @@ WSGI_APPLICATION = 'ArtGoChess.wsgi.application'
 
 DBENGINE = 'django.db.backends.postgresql'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': DBENGINE,
+#         'NAME': os.getenv("DATABASE_NAME"),
+#         'USER': os.getenv("DATABASE_USER"),
+#         'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+#         'HOST': os.getenv("DATABASE_HOST"),
+#         'PORT': os.environ.get("DATABASE_PORT"),
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': DBENGINE,
-        'NAME': os.getenv("DATABASE_NAME"),
-        'USER': os.getenv("DATABASE_USER"),
-        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
-        'HOST': os.getenv("DATABASE_HOST"),
-        'PORT': os.environ.get("DATABASE_PORT"),
+        'NAME': "postgres",
+        'USER': "postgres",
+        'PASSWORD': "postgres",
+        'HOST': "localhost",
+        'PORT': "5432",
     }
 }
 

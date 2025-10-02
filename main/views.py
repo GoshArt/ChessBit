@@ -119,12 +119,12 @@ def index(request):
             request.session['id'] = ""
             print("done")
 
-    print(name)
+    # print(name)
     if "auth" in request.session:
         if request.session["auth"] == True:
             auth = True
             name = request.session["name"]
-    print(name)
+    # print(name)
     # best_players = sorted(best_players, key=lambda x: x['res'], reverse=True)
     return render(request, 'main/index.html',
                   {"name": name, "url_avatar": url_avatar, "auth": auth, "error": error, "best_players": best_players,
