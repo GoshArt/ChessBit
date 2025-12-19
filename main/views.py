@@ -234,8 +234,6 @@ def profile(request):
 
             return redirect(profile)
 
-
-
         if "deletion" in request.POST:
             print(1)
             pos = Users.objects.get(nickname=request.session["name"])
@@ -500,3 +498,19 @@ def rules(request):
         if request.session["auth"]:
             name = request.session["name"]
     return render(request, 'main/rules.html', {'name': name, "url_avatar": "main/img/person.svg"})
+
+
+def rules_part1(request):
+    name = "Гость"
+    if "auth" in request.session:
+        if request.session["auth"]:
+            name = request.session["name"]
+    return render(request, 'main/rules_part1.html', {'name': name, "url_avatar": "main/img/person.svg"})
+
+
+def rules_part2(request):
+    name = "Гость"
+    if "auth" in request.session:
+        if request.session["auth"]:
+            name = request.session["name"]
+    return render(request, 'main/rules_part2.html', {'name': name, "url_avatar": "main/img/person.svg"})

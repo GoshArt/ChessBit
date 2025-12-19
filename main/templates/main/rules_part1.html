@@ -1,0 +1,248 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+    Правила шахмат - Часть 1
+{% endblock %}
+
+{% block content %}
+    {% include "main/fragments/header.html" %}
+    <div class="changeAccount row col-12 p-0 mt-4">
+        <div class="col-2 m-0 mt-1" style="width: max-content">
+            <a type="submit" href="/" class="btn btn-secondary">Вернуться в меню</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <h1>Как играть в шахматы | Правила + 7 шагов для начинающих</h1>
+        <p>Никогда не поздно научиться играть в шахматы - главную настольную игру в мире! Изучаем правила и узнаем, как
+            добиться успеха в шахматах!</p>
+        <ul>
+            <li><a href="#chess-board" title="chess board">Как располагается доска</a></li>
+            <li><a href="#piece-movements" title="chess pieces movements">Как ходят фигуры</a></li>
+            <li><a href="#special-movements" title="special chess movements">Особые правила шахмат</a></li>
+            <li><a href="#first-move-chess" title="first move in chess">Первый ход</a></li>
+            <li><a href="#win-chess" title="how to win at chess">Как победить в шахматной партии</a></li>
+            <li><a href="#chess-strategy" title="chess strategy">Основные стратегические приемы</a></li>
+            <li><a href="#play-chess" title="play chess">Играем как можно чаще</a></li>
+        </ul>
+        <p><strong>Эта страница содержит первые 3 шага. <a href="{% url 'rules_part2' %}">Перейти к продолжению (шаги 4-7) →</a></strong></p>
+        <hr/>
+        
+        <h2><strong><a id="chess-board"></a>Шаг 1. Как располагается доска</strong></h2>
+        <p>Перед игрой доска располагается так, чтобы в правом нижнем углу перед каждым из игроков находилось белое
+            поле.</p>
+        <p><img class=""
+                src="{% static "main/img/rulesResurses/fieldRotation.png" %}"
+                style="display: block; margin-left: auto; margin-right: auto;" alt="Доска"/>
+        </p>
+        <p>Шахматные фигуры расставляются всегда одинаковым образом.
+            Второй ряд (или горизонталь) занимают пешки. Ладьи стоят по углам, рядом с ними - кони, после коней - слоны,
+            наконец, ферзь ставится на поле своего цвета (белый ферзь на белое, чёрный на чёрное), и король занимает
+            оставшееся поле.</p>
+        <p><img class="border border-success"
+                src="{% static "main/img/rulesResurses/chessPiecesArrangement.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;" alt="Доска"
+                width="403" height="404"/></p>
+        <p style="text-align: center;"><em>Расставить фигуры на шахматной доске в начале партии очень просто.</em></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/WzEefpTEsGA"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em><em></em></p>
+        <hr/>
+        
+        <h2><strong><a id="piece-movements"></a>Шаг 2. Как ходят фигуры</strong></h2>
+        <p>Каждая из шести фигур ходит по-своему. Фигуры не могут перепрыгивать через другие фигуры (за исключением
+            коня) или вставать на поле, где уже стоит фигура того же цвета. Однако они могут встать на место фигуры
+            противника, которая считается взятой. Фигуры обычно размещают так, чтобы они угрожали фигурам противника
+            взятием (встать на поле, где стояла взятая фигура, заменив её), защищали свои собственные фигуры, которым
+            грозит взятие, или держали под боем важные поля доски.</p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="//www.youtube.com/embed/yVYej8NuD9g"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em><em></em>
+        </p>
+        
+        <h3><strong>Как в шахматах ходит король</strong></h3>
+        <p>Король - самая важная фигура, но при этом и одна из самых слабых. Король может ходить только на одно поле в
+            любом направлении: вверх, вниз, в стороны и по диагонали. Король никогда не может вставать на битое поле
+            (где его может взять фигура соперника). Когда король атакован другой фигурой, это называется "шах".</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/kingMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходит король в шахматах" width="401" height="401"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="//www.youtube.com/embed/5ovor_nTe8o"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em><em></em>
+        </p>
+        
+        <h3><strong>Как в шахматах ходит ферзь</strong></h3>
+        <p>Ферзь - самая сильная фигура. Он может ходить по прямой в любом направлении - вперёд, назад, в стороны или по
+            диагонали на любое число полей, но при этом он не может перепрыгивать через другие фигуры. Если ферзь или
+            любая другая фигура берёт фигуру соперника, ход заканчивается. Смотрите, как белый ферзь берёт чёрного,
+            вынуждая чёрного короля сделать ход.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/queenMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходит ферзь в шахматах" width="400" height="401"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/WZvfqQyTiCQ"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Как в шахматах ходит ладья</strong></h3>
+        <p>Ладья может ходить на любое число полей, но только вперёд, назад и в стороны (не по диагонали). Ладьи
+            особенно сильны, когда они защищают друг друга и действуют сообща!</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/rookMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходят ладьи в шахматах" width="398" height="399"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/gWHYc_1Lxbo"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Как в шахматах ходит слон</strong></h3>
+        <p>Слон может ходить на любое число полей, соединенных углами по диагонали. Каждому слону доступна только
+            половина полей доски (одного цвета, белого или черного). Слоны хорошо действуют сообща, идеально дополняя
+            друг друга.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/bishopMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходят слоны в шахматах" width="400" height="400"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/IuKtjCGfgno"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Как в шахматах ходит конь</strong></h3>
+        <p>Кони ходят иначе, чем другие фигуры - на два поля в одном направлении и далее на одно поле под углом 90
+            градусов, буквой "Г". Конь - единственная фигура, способная перепрыгивать через другие фигуры.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/kingMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходят кони в шахматах" width="400" height="400"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/soLJjeQ9DVA"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Как в шахматах ходит пешка</strong></h3>
+        <p>Пешка - необычная фигура, она ходит и берёт по-разному: ходить пешка может лишь вперёд, а брать - лишь по
+            диагонали. Пешка может передвигаться только на одно поле за ход. но еще не ходившая пешка может пойти вперёд
+            на одно или два поля. Пешка может брать только по диагонали на одно поле перед собой. Пешка не может ходить
+            или брать назад. Если другая фигура находится прямо перед пешкой, та не может сделать ход вперёд и не может
+            взять эту фигуру.</p>
+        <p><img class="  border border-success"
+                src="{% static "main/img/rulesResurses/pawnMove.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как ходят пешки в шахматах" width="401" height="401"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="https://www.youtube.com/embed/AxvgAoAT7fY"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        <hr/>
+        
+        <h2><strong><a id="special-movements"></a>Шаг 3. Особые правила шахмат</strong></h2>
+        <p>В шахматах есть несколько особых правил, придуманных, чтобы сделать игру более весёлой и интересной.</p>
+        <h3><strong>Как превратить пешку в шахматах</strong></h3>
+        <p>У пешки есть одна замечательная особенность: дойдя до противоположной стороны доски, она может стать любой
+            другой фигурой (это называется "пешечное превращение").</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/pawnPromotion.jpeg" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Превращение пешки" width="401" height="406"/></p>
+        <p>Пешка может превратиться в любую фигуру. Некоторым любителям кажется, что пешка может превратиться лишь в
+            одну из ранее взятых фигур. Это НЕ так. Как правило, пешку превращают в ферзя, но возможно и превращение в
+            другие фигуры.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/pawnPromotion.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Превращение пешки" width="401" height="401"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="//www.youtube.com/embed/Vlqxr0Viw_Q"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Взятие на проходе</strong></h3>
+        <p>Последнее правило, относящееся к пешкам, называется "взятие на проходе". Пешку, сделавшую ход на два поля от своей
+            первоначальной позиции, может взять пешка соперника, расположенная на соседней вертикали и на горизонтали,
+            только что занятой пешкой. При взятии пешка соперника занимает поле, которое заняла взятая пешка миновала.</p>
+        <p style="text-align: center;"><img class=""
+                src="{% static "main/img/rulesResurses/enPassant.jpeg" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Взятие на проходе в шахматах"/><em></em></p>
+        <p>Такое взятие возможно только ходом, следующим за продвижением на два поля, и невозможно впоследствии. Изучим
+            пример, чтобы лучше понять это необычное, но важное правило.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/enPassant.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="взятие на проходе" width="401" height="401"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="//www.youtube.com/embed/WAwusR6J2yc"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <h3><strong>Рокировка</strong></h3>
+        <p>Рокировка - еще одно особое правило шахмат. Рокировка позволяет сделать две важные
+            вещи за один ход: обезопасить (по возможности) вашего короля и вывести из угла ладью, включив её в игру.
+            Совершая рокировку, игрок перемещает своего короля на два поля по направлению к ладье, затем эта ладья
+            занимает на поле, которое король только что пересек (смотрите пример). Рокировку можно выполнить только при
+            соблюдении следующих условий:</p>
+        <ul>
+            <li>до рокировки король ни разу не ходил;</li>
+            <li>ладья, совершающая рокировку, ни разу не ходила;</li>
+            <li>между королём и ладьёй нет других фигур;</li>
+            <li>король не находится под шахом и не пересекает поле, атакованное фигурой противника.</li>
+        </ul>
+        <p>Обратите внимание, что при рокировке на королевский фланг король оказывается ближе к краю доски. Этот ход
+            называется "короткой рокировкой". Рокировка на другой фланг, через поле, где находился ферзь, называется
+            "длинной рокировкой". Как при короткой, так и при длинной рокировке, король передвигается только на два
+            поля.</p>
+        <p><img class=" border border-success"
+                src="{% static "main/img/rulesResurses/castling.gif" %}"
+                style="display: block; margin-left: auto; margin-right: auto;"
+                alt="Как делать рокировку в шахматах" width="399" height="399"/></p>
+        <p style="text-align: center;"><em>
+            <iframe width="560" height="315" class=""
+                    src="//www.youtube.com/embed/6GJx9wxLycI"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen"></iframe>
+        </em></p>
+        
+        <div class="navigation-box p-3 mt-4 mb-4 border rounded bg-light">
+            <h4>Продолжение руководства</h4>
+            <p>Вы изучили первые 3 шага: расположение доски, ходы фигур и особые правила.</p>
+            <p><strong>Далее в руководстве:</strong></p>
+            <ul>
+                <li>Первый ход в партии</li>
+                <li>Как победить в шахматной партии</li>
+                <li>Основные стратегические приемы</li>
+                <li>Играем как можно чаще</li>
+                <li>Ответы на частые вопросы</li>
+            </ul>
+            <a href="{% url 'rules_part2' %}" class="btn btn-primary">Перейти к продолжению →</a>
+            <a href="/" class="btn btn-secondary">Вернуться в меню</a>
+        </div>
+    </div>
+{% endblock %}
